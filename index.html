@@ -1,6 +1,70 @@
 <!DOCTYPE html>
 <html>
+<head><!DOCTYPE html>
+<html>
 <head>
+<meta charset="UTF-8">
+<title>IPTV</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+body { background:#111; color:white; text-align:center; }
+video { width:90%; margin-top:20px; }
+select, button { padding:10px; margin:10px; }
+</style>
+</head>
+
+<body>
+
+<h1>Canlı Yayın</h1>
+
+<select id="channels"></select><br>
+<button onclick="play()">İzle</button>
+
+<video id="video" controls></video>
+
+<script>
+
+const supabase = supabase.createClient(
+  "https://ycjhdiyvpymwlbycaznz.supabase.co",
+  "BURAYA_KEY"
+);
+
+async function load(){
+  let { data } = await supabase.from("channels").select("*");
+
+  let select = document.getElementById("channels");
+  select.innerHTML="";
+
+  data.forEach(c=>{
+    select.innerHTML += `<option value="${c.url}">${c.name}</option>`;
+  });
+}
+
+function play(){
+  let video = document.getElementById("video");
+  let url = document.getElementById("channels").value;
+
+  if(Hls.isSupported()){
+    let hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+  }
+}
+
+load();
+
+supabase
+.channel('db')
+.on('postgres_changes', { event: '*', schema: 'public', table: 'channels' }, load)
+.subscribe();
+
+</script>
+
+</body>
+</html>
 <style>
 body { margin:0; }
 iframe {
