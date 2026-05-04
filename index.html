@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>IPTV Site</title>
+<meta charset="UTF-8">
+<title>IPTV Site</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+body {
+  background:#000;
+  color:white;
+  text-align:center;
+  font-family:Arial;
+}
+
+.box {
+  border:1px solid white;
+  margin:10px;
+  padding:10px;
+}
+</style>
+
 </head>
 
-<body style="background:black;color:white;text-align:center">
+<body>
 
 <h1>KANALLAR</h1>
 
 <div id="liste"></div>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
 const supabase = window.supabase.createClient(
@@ -20,26 +36,22 @@ const supabase = window.supabase.createClient(
 );
 
 async function yukle(){
-  let { data, error } = await supabase
+  let { data } = await supabase
     .from("channels")
     .select("*");
 
-  console.log("DATA:", data);
-  console.log("ERROR:", error);
+  let html = "";
 
-  let alan = document.getElementById("liste");
-  alan.innerHTML = "";
+  data.forEach(x=>{
+    html += `
+      <div class="box">
+        <h3>${x.name}</h3>
+        <video src="${x.url}" controls width="300"></video>
+      </div>
+    `;
+  });
 
-  if(data){
-    data.forEach(x=>{
-      alan.innerHTML += `
-        <div style="margin:15px;padding:10px;border:1px solid white;">
-          <h3>${x.name}</h3>
-          <video src="${x.url}" controls width="300"></video>
-        </div>
-      `;
-    });
-  }
+  document.getElementById("liste").innerHTML = html;
 }
 
 yukle();
