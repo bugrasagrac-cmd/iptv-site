@@ -1,82 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head><!DOCTYPE html>
-<html>
 <head>
-<meta charset="UTF-8">
-<title>IPTV</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<style>
-body { background:#111; color:white; text-align:center; }
-video { width:90%; margin-top:20px; }
-select, button { padding:10px; margin:10px; }
-</style>
+  <meta charset="UTF-8">
+  <title>IPTV Site</title>
 </head>
 
-<body>
+<body style="background:black;color:white;text-align:center">
 
-<h1>Canlı Yayın</h1>
+<h1>KANALLAR</h1>
 
-<select id="channels"></select><br>
-<button onclick="play()">İzle</button>
+<div id="liste"></div>
 
-<video id="video" controls></video>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
-
-const supabase = supabase.createClient(
+const supabase = window.supabase.createClient(
   "https://ycjhdiyvpymwlbycaznz.supabase.co",
-  "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
+  "BURAYA_SENİN_PUBLISHABLE_KEYİN"
 );
 
-async function load(){
-  let { data } = await supabase.from("channels").select("*");
+async function yukle(){
+  let { data, error } = await supabase
+    .from("channels")
+    .select("*");
 
-  let select = document.getElementById("channels");
-  select.innerHTML="";
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
 
-  data.forEach(c=>{
-    select.innerHTML += `<option value="${c.url}">${c.name}</option>`;
-  });
-}
+  let alan = document.getElementById("liste");
+  alan.innerHTML = "";
 
-function play(){
-  let video = document.getElementById("video");
-  let url = document.getElementById("channels").value;
-
-  if(Hls.isSupported()){
-    let hls = new Hls();
-    hls.loadSource(url);
-    hls.attachMedia(video);
+  if(data){
+    data.forEach(x=>{
+      alan.innerHTML += `
+        <div style="margin:15px;padding:10px;border:1px solid white;">
+          <h3>${x.name}</h3>
+          <video src="${x.url}" controls width="300"></video>
+        </div>
+      `;
+    });
   }
 }
 
-load();
-
-supabase
-.channel('db')
-.on('postgres_changes', { event: '*', schema: 'public', table: 'channels' }, load)
-.subscribe();
-
+yukle();
 </script>
-
-</body>
-</html>
-<style>
-body { margin:0; }
-iframe {
-  width:100%;
-  height:100vh;
-  border:none;
-}
-</style>
-</head>
-<body>
-
-<iframe src="https://patron/"></iframe>
 
 </body>
 </html>
