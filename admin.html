@@ -1,96 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<meta charset="UTF-8">
+<title>Admin Panel</title>
 
-    .box {
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 15px;
-      width: 300px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-    }
+.box {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 15px;
+  width: 300px;
+  text-align: center;
+}
 
-    button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #3b82f6;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+}
 
-    button:hover {
-      background: #2563eb;
-    }
+button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .liste {
-      margin-top: 20px;
-      text-align: left;
-      font-size: 14px;
-    }
-  </style>
+button:hover {
+  background: #2563eb;
+}
+</style>
+
 </head>
-
 <body>
 
-<!-- 🔐 LOGIN -->
+<!-- LOGIN -->
 <div class="box" id="login">
   <h2>Admin Giriş</h2>
   <input id="pass" type="password" placeholder="Şifre">
   <button onclick="giris()">Giriş Yap</button>
 </div>
 
-<!-- 🎛️ PANEL -->
+<!-- PANEL -->
 <div class="box" id="panel" style="display:none;">
-  <h2>Admin Panel</h2>
-
+  <h2>Kanal Ekle</h2>
   <input id="name" placeholder="Kanal adı">
   <input id="url" placeholder="M3U8 link">
-  <button onclick="ekle()">Kanal Ekle</button>
-
-  <div class="liste" id="liste"></div>
+  <button onclick="ekle()">Ekle</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
+// 🔗 SUPABASE
 const supabase = supabase.createClient(
   "https://ycjhdiyvpymwlbycaznz.supabase.co",
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
-// 🔐 ŞİFRE
+// 🔐 GİRİŞ
 function giris(){
   let p = document.getElementById("pass").value;
 
-  if(p === "1234"){
+  if(p === "18991899"){
     document.getElementById("login").style.display = "none";
     document.getElementById("panel").style.display = "block";
-    listele();
   } else {
-    alert("Yanlış şifre");
+    alert("Yanlış şifre!");
   }
 }
 
@@ -102,19 +94,6 @@ async function ekle(){
   await supabase.from("channels").insert([{ name, url }]);
 
   alert("Eklendi!");
-  listele();
-}
-
-// 📋 LİSTELE
-async function listele(){
-  let { data } = await supabase.from("channels").select("*");
-
-  let html = "";
-  data.forEach(x => {
-    html += `<div>• ${x.name}</div>`;
-  });
-
-  document.getElementById("liste").innerHTML = html;
 }
 </script>
 
