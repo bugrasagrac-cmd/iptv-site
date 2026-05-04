@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>IPTV Sistem</title>
+<style>
+body { font-family: Arial; background:#111; color:white; margin:0; }
+.container { padding:20px; }
+input, button { padding:10px; margin:5px 0; width:100%; }
+button { background:red; color:white; border:none; }
+.channel { padding:10px; border-bottom:1px solid #333; cursor:pointer; }
+video { width:100%; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<!-- ANA GİRİŞ -->
+<div class="container" id="mainLogin">
+<h2>Giriş Seç</h2>
+<button onclick="showAdmin()">Admin Girişi</button>
+<button onclick="showUser()">Üye Girişi</button>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div class="container" id="adminLogin" style="display:none;">
+<h2>Admin Giriş</h2>
+<input id="adminUser" placeholder="Kullanıcı">
+<input id="adminPass" type="password" placeholder="Şifre">
+<button onclick="adminLogin()">Giriş</button>
+</div>
+
+<!-- USER LOGIN -->
+<div class="container" id="userLogin" style="display:none;">
+<h2>Üye Giriş</h2>
+<input id="userName" placeholder="Kullanıcı">
+<input id="userPass" type="password" placeholder="Şifre">
+<button onclick="userLogin()">Giriş</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="container" id="adminPanel" style="display:none;">
+<h2>Admin Panel</h2>
+
+<h3>Kanal Ekle</h3>
+<input id="chName" placeholder="Kanal adı">
+<input id="chUrl" placeholder="m3u8 link">
+<button onclick="addChannel()">Ekle</button>
+
+<h3>Kullanıcı Ekle</h3>
+<input id="uName" placeholder="Kullanıcı">
+<input id="uPass" placeholder="Şifre">
+<input id="uExp" placeholder="Bitiş tarihi (2026-12-31)">
+<button onclick="addUser()">Ekle</button>
+
+<h3>Kanallar</h3>
+<div id="channels"></div>
+
+<h3>Kullanıcılar</h3>
+<div id="users"></div>
+</div>
+
+<!-- USER PANEL -->
+<div class="container" id="userPanel" style="display:none;">
+<h2>Kanallar</h2>
+<video id="player" controls></video>
+<div id="channelList"></div>
+</div>
+
+<script>
+// ADMIN
+let ADMIN_USER = "admin";
+let ADMIN_PASS = "1234";
+
+// STORAGE
+let channels = JSON.parse(localStorage.getItem("channels")) || [];
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+// EKRAN GEÇİŞ
+function showAdmin(){
+    hideAll();
+    document.getElementById("adminLogin").style.display="block";
+}
+function showUser(){
+    hideAll();
+    document.getElementById("userLogin").style.display="block";
+}
+function hideAll(){
+    document.querySelectorAll(".container").forEach(d=>d.style.display="none");
+}
+
+// ADMIN LOGIN
+function adminLogin(){
+    let u = document.getElementById("adminUser").value;
+    let p = document.getElementById("adminPass").value;
+
+    if(u===ADMIN_USER && p===ADMIN_PASS){
+        hideAll();
+        document.getElementById("adminPanel").style.display="block";
+        render();
+    } else {
+        alert("Hatalı giriş");
+    }
+}
+
+// USER LOGIN
+function userLogin(){
+    let u = document.getElementById("userName").value;
+    let p = document.getElementById("userPass").value;
+
+    let user = users.find(x => x.name===u && x.pass===p);
+
+    if(!user){
+        alert("Hatalı giriş");
+        return;
+    }
+
+    if(isExpired(user.exp)){
+        alert("Abonelik süresi dolmuş");
+        return;
+    }
+
+    hideAll();
+    document.getElementById("userPanel").style.display="block";
+    showChannels();
+}
+
+// KANAL EKLE
+function addChannel(){
+    let name = document.getElementById("chName").value;
+    let url = document.getElementById("chUrl").value;
+
+    channels.push({name,url});
+    localStorage.setItem("channels", JSON.stringify(channels));
+    render();
+}
+
+// KULLANICI EKLE
+function addUser(){
+    let name = document.getElementById("uName").value;
+    let pass = document.getElementById("uPass").value;
+    let exp = document.getElementById("uExp").value;
+
+    users.push({name,pass,exp});
+    localStorage.setItem("users", JSON.stringify(users));
+    render();
+}
+
+// SİLME
+function deleteChannel(i){
+    channels.splice(i,1);
+    localStorage.setItem("channels", JSON.stringify(channels));
+    render();
+}
+function deleteUser(i){
+    users.splice(i,1);
+    localStorage.setItem("users", JSON.stringify(users));
+    render();
+}
+
+// ADMIN LİSTE
+function render(){
+    let chDiv = document.getElementById("channels");
+    chDiv.innerHTML="";
+    channels.forEach((c,i)=>{
+        chDiv.innerHTML += `<div class='channel'>${c.name} <button onclick='deleteChannel(${i})'>Sil</button></div>`;
+    });
+
+    let uDiv = document.getElementById("users");
+    uDiv.innerHTML="";
+    users.forEach((u,i)=>{
+        uDiv.innerHTML += `<div class='channel'>${u.name} - ${u.exp} <button onclick='deleteUser(${i})'>Sil</button></div>`;
+    });
+}
+
+// USER KANALLAR
+function showChannels(){
+    let list = document.getElementById("channelList");
+    list.innerHTML="";
+
+    channels.forEach((c,i)=>{
+        let div = document.createElement("div");
+        div.className="channel";
+        div.innerText=c.name;
+        div.onclick=()=>play(c.url);
+        list.appendChild(div);
+    });
+}
+
+// PLAYER
+function play(url){
+    let video = document.getElementById("player");
+    video.src = url;
+    video.play();
+}
+
+// SÜRE KONTROL
+function isExpired(date){
+    let today = new Date();
+    let exp = new Date(date);
+    return today > exp;
+}
+</script>
+
+</body>
+</html>
