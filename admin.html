@@ -2,20 +2,44 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin</title>
+<title>Admin Panel</title>
+
+<style>
+body {
+  background:#111;
+  color:white;
+  text-align:center;
+  font-family:Arial;
+}
+input, button {
+  padding:10px;
+  margin:5px;
+}
+</style>
+
 </head>
 
-<body style="background:black; color:white; text-align:center;">
+<body>
 
 <h2>Şifre Gir</h2>
 <input id="pass" type="password">
 <button onclick="giris()">Giriş</button>
 
 <div id="panel" style="display:none;">
-  <h2>Panel Açıldı</h2>
+  <h2>Kanal Ekle</h2>
+  <input id="name" placeholder="Kanal adı"><br>
+  <input id="url" placeholder="m3u8 link"><br>
+  <button onclick="ekle()">Ekle</button>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <script>
+const supabase = supabase.createClient(
+  "https://ycjhdiyvpymwlbycaznz.supabase.co",
+  "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
+);
+
 function giris(){
   var p = document.getElementById("pass").value;
 
@@ -24,6 +48,15 @@ function giris(){
   } else {
     alert("Yanlış şifre");
   }
+}
+
+async function ekle(){
+  var name = document.getElementById("name").value;
+  var url = document.getElementById("url").value;
+
+  await supabase.from("channels").insert([{ name, url }]);
+
+  alert("Eklendi!");
 }
 </script>
 
