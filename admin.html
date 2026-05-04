@@ -22,10 +22,6 @@
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
-    h1 {
-      margin-bottom: 20px;
-    }
-
     input {
       width: 100%;
       padding: 10px;
@@ -59,8 +55,16 @@
 
 <body>
 
-<div class="box">
-  <h1>Admin Panel</h1>
+<!-- 🔐 LOGIN -->
+<div class="box" id="login">
+  <h2>Admin Giriş</h2>
+  <input id="pass" type="password" placeholder="Şifre">
+  <button onclick="giris()">Giriş Yap</button>
+</div>
+
+<!-- 🎛️ PANEL -->
+<div class="box" id="panel" style="display:none;">
+  <h2>Admin Panel</h2>
 
   <input id="name" placeholder="Kanal adı">
   <input id="url" placeholder="M3U8 link">
@@ -77,6 +81,20 @@ const supabase = supabase.createClient(
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
+// 🔐 ŞİFRE
+function giris(){
+  let p = document.getElementById("pass").value;
+
+  if(p === "1234"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+    listele();
+  } else {
+    alert("Yanlış şifre");
+  }
+}
+
+// ➕ EKLE
 async function ekle(){
   let name = document.getElementById("name").value;
   let url = document.getElementById("url").value;
@@ -87,6 +105,7 @@ async function ekle(){
   listele();
 }
 
+// 📋 LİSTELE
 async function listele(){
   let { data } = await supabase.from("channels").select("*");
 
@@ -97,8 +116,6 @@ async function listele(){
 
   document.getElementById("liste").innerHTML = html;
 }
-
-listele();
 </script>
 
 </body>
