@@ -8,30 +8,14 @@
 
 <style>
 body {
-  background:#0f172a;
+  background:#111;
   color:white;
-  font-family:Arial;
   text-align:center;
+  font-family:Arial;
 }
-
-.box {
-  background:#1e293b;
-  padding:15px;
-  margin:10px;
-  border-radius:10px;
-}
-
 input, button {
   padding:10px;
   margin:5px;
-  border:none;
-  border-radius:8px;
-}
-
-button {
-  background:#3b82f6;
-  color:white;
-  cursor:pointer;
 }
 </style>
 
@@ -39,19 +23,16 @@ button {
 
 <body>
 
-<h1>📺 Admin Panel</h1>
+<h2>Admin Giriş</h2>
+<input id="pass" type="password">
+<button onclick="giris()">Giriş</button>
 
-<!-- EKLE -->
-<div class="box">
-  <h3>Kanal Ekle</h3>
-  <input id="name" placeholder="Kanal adı">
-  <input id="url" placeholder="M3U8 link">
-  <br>
+<div id="panel" style="display:none;">
+  <h2>Kanal Ekle</h2>
+  <input id="name" placeholder="Kanal adı"><br>
+  <input id="url" placeholder="m3u8 link"><br>
   <button onclick="ekle()">Ekle</button>
 </div>
-
-<!-- LİSTE -->
-<div id="liste"></div>
 
 <script>
 const supabase = window.supabase.createClient(
@@ -59,54 +40,22 @@ const supabase = window.supabase.createClient(
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
-// EKLE
+function giris(){
+  if(document.getElementById("pass").value === "1234"){
+    document.getElementById("panel").style.display = "block";
+  } else {
+    alert("Yanlış şifre");
+  }
+}
+
 async function ekle(){
   let name = document.getElementById("name").value;
   let url = document.getElementById("url").value;
 
-  if(!name || !url){
-    alert("Boş bırakma");
-    return;
-  }
+  await supabase.from("channels").insert([{ name, url }]);
 
-  const { error } = await supabase
-    .from("channels")
-    .insert([{ name, url }]);
-
-  if(error){
-    alert("Hata: " + error.message);
-  }
-
-  yukle();
+  alert("Eklendi");
 }
-
-// SİL
-async function sil(id){
-  await supabase.from("channels").delete().eq("id", id);
-  yukle();
-}
-
-// LİSTELE
-async function yukle(){
-  let { data } = await supabase.from("channels").select("*");
-
-  let html = "";
-
-  data.forEach(x=>{
-    html += `
-      <div class="box">
-        <h3>${x.name}</h3>
-        <video src="${x.url}" controls width="300"></video>
-        <br>
-        <button onclick="sil(${x.id})">Sil</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("liste").innerHTML = html;
-}
-
-yukle();
 </script>
 
 </body>
