@@ -6,14 +6,62 @@
 
 <style>
 body {
-  background:#111;
+  margin:0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   color:white;
-  text-align:center;
-  font-family:Arial;
 }
-input, button {
-  padding:10px;
-  margin:5px;
+
+.container {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box {
+  background:#111827;
+  padding:30px;
+  border-radius:15px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,0,0,0.6);
+}
+
+h2 {
+  margin-bottom:20px;
+}
+
+input {
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:10px;
+  border:none;
+  outline:none;
+}
+
+button {
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#3b82f6;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover {
+  background:#2563eb;
+}
+
+.list {
+  margin-top:15px;
+  text-align:left;
+  font-size:14px;
+  max-height:150px;
+  overflow:auto;
 }
 </style>
 
@@ -21,15 +69,26 @@ input, button {
 
 <body>
 
-<h2>Şifre Gir</h2>
-<input id="pass" type="password">
-<button onclick="giris()">Giriş</button>
+<div class="container">
 
-<div id="panel" style="display:none;">
-  <h2>Kanal Ekle</h2>
-  <input id="name" placeholder="Kanal adı"><br>
-  <input id="url" placeholder="m3u8 link"><br>
-  <button onclick="ekle()">Ekle</button>
+<!-- LOGIN -->
+<div class="box" id="login">
+  <h2>Admin Giriş</h2>
+  <input id="pass" type="password" placeholder="Şifre">
+  <button onclick="giris()">Giriş Yap</button>
+</div>
+
+<!-- PANEL -->
+<div class="box" id="panel" style="display:none;">
+  <h2>Kanal Yönetimi</h2>
+
+  <input id="name" placeholder="Kanal adı">
+  <input id="url" placeholder="M3U8 link">
+  <button onclick="ekle()">Kanal Ekle</button>
+
+  <div class="list" id="liste"></div>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -40,23 +99,40 @@ const supabase = supabase.createClient(
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
+// giriş
 function giris(){
   var p = document.getElementById("pass").value;
 
-  if(p == "1234"){
+  if(p === "1234"){
+    document.getElementById("login").style.display = "none";
     document.getElementById("panel").style.display = "block";
+    listele();
   } else {
     alert("Yanlış şifre");
   }
 }
 
+// ekleme
 async function ekle(){
   var name = document.getElementById("name").value;
   var url = document.getElementById("url").value;
 
   await supabase.from("channels").insert([{ name, url }]);
 
-  alert("Eklendi!");
+  alert("Eklendi");
+  listele();
+}
+
+// listeleme
+async function listele(){
+  let { data } = await supabase.from("channels").select("*");
+
+  let html = "";
+  data.forEach(x => {
+    html += "<div>• " + x.name + "</div>";
+  });
+
+  document.getElementById("liste").innerHTML = html;
 }
 </script>
 
