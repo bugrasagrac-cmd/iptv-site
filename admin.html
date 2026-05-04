@@ -1,71 +1,37 @@
-<!-- VERSION 999 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ADMIN V2</title>
+<title>Admin Panel</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 body {
-  margin:0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #ff00cc, #3333ff);
+  background:#111;
   color:white;
-}
-
-.box {
-  width:350px;
-  margin:100px auto;
-  padding:30px;
-  background:rgba(0,0,0,0.7);
-  border-radius:20px;
   text-align:center;
-  box-shadow:0 0 30px rgba(255,0,255,0.7);
+  font-family:Arial;
 }
-
-input {
-  width:100%;
+input, button {
   padding:10px;
-  margin:10px 0;
-  border:none;
-  border-radius:10px;
-}
-
-button {
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  background:#ff00cc;
-  color:white;
-  cursor:pointer;
-}
-
-#panel {
-  display:none;
+  margin:5px;
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="box">
+<h2>Admin Giriş</h2>
+<input id="pass" type="password">
+<button onclick="giris()">Giriş</button>
 
-<h2>🔐 Admin Giriş</h2>
-<input type="password" id="sifre" placeholder="Şifre">
-<button onclick="giris()">Giriş Yap</button>
-
-<div id="panel">
-<h2>📺 Kanal Ekle</h2>
-<input id="isim" placeholder="Kanal adı">
-<input id="url" placeholder="M3U8 link">
-<button onclick="ekle()">Ekle</button>
-
-<div id="liste"></div>
-</div>
-
+<div id="panel" style="display:none;">
+  <h2>Kanal Ekle</h2>
+  <input id="name" placeholder="Kanal adı"><br>
+  <input id="url" placeholder="m3u8 link"><br>
+  <button onclick="ekle()">Ekle</button>
 </div>
 
 <script>
@@ -75,34 +41,20 @@ const supabase = window.supabase.createClient(
 );
 
 function giris(){
-  if(document.getElementById("sifre").value === "1234"){
+  if(document.getElementById("pass").value === "1234"){
     document.getElementById("panel").style.display = "block";
-    alert("Giriş başarılı");
-    yukle();
   } else {
-    alert("Şifre yanlış");
+    alert("Yanlış şifre");
   }
 }
 
 async function ekle(){
-  let isim = document.getElementById("isim").value;
+  let name = document.getElementById("name").value;
   let url = document.getElementById("url").value;
 
-  await supabase.from("channels").insert([{isim, url}]);
+  await supabase.from("channels").insert([{ name, url }]);
 
   alert("Eklendi");
-  yukle();
-}
-
-async function yukle(){
-  let { data } = await supabase.from("channels").select("*");
-
-  let html = "";
-  data.forEach(x=>{
-    html += "<p>"+x.isim+"</p>";
-  });
-
-  document.getElementById("liste").innerHTML = html;
 }
 </script>
 
