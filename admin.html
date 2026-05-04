@@ -2,37 +2,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel</title>
-
+<title>Admin</title>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<style>
-body {
-  background:#111;
-  color:white;
-  text-align:center;
-  font-family:Arial;
-}
-input, button {
-  padding:10px;
-  margin:5px;
-}
-</style>
-
 </head>
 
-<body>
+<body style="background:black;color:white;text-align:center">
 
-<h2>Admin Giriş</h2>
-<input id="pass" type="password">
-<button onclick="giris()">Giriş</button>
+<h2>Admin</h2>
 
-<div id="panel" style="display:none;">
-  <h2>Kanal Ekle</h2>
-  <input id="name" placeholder="Kanal adı"><br>
-  <input id="url" placeholder="m3u8 link"><br>
-  <button onclick="ekle()">Ekle</button>
-</div>
+<input id="name" placeholder="Kanal adı">
+<input id="url" placeholder="link">
+<br>
+<button onclick="ekle()">Ekle</button>
 
 <script>
 const supabase = window.supabase.createClient(
@@ -40,21 +21,13 @@ const supabase = window.supabase.createClient(
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
-function giris(){
-  if(document.getElementById("pass").value === "1234"){
-    document.getElementById("panel").style.display = "block";
-  } else {
-    alert("Yanlış şifre");
-  }
-}
-
 async function ekle(){
   let name = document.getElementById("name").value;
   let url = document.getElementById("url").value;
 
   await supabase.from("channels").insert([{ name, url }]);
 
-  alert("Eklendi");
+  alert("eklendi");
 }
 </script>
 
