@@ -1,29 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Kullanıcı Giriş</title>
+<style>
+body { margin:0; }
+iframe {
+  width:100%;
+  height:100vh;
+  border:none;
+}
+</style>
 </head>
 <body>
 
-<h2>Kullanıcı Girişi</h2>
-
-<input type="text" id="user" placeholder="Kullanıcı adı"><br><br>
-<input type="password" id="pass" placeholder="Şifre"><br><br>
-
-<button onclick="login()">Giriş Yap</button>
-
-<script>
-function login(){
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
-
-  if(localStorage.getItem(u) == p){
-    alert("Giriş başarılı");
-  }else{
-    alert("Hatalı giriş");
-  }
-}
-</script>
+<iframe src="BURAYA_SITE_LINK"></iframe>
 
 </body>
 </html>
