@@ -17,8 +17,12 @@ function login(){
   let u = document.getElementById("user").value;
   let p = document.getElementById("pass").value;
 
-  if(localStorage.getItem(u) == p){
-    alert("Giriş başarılı");
+  if(
+ (user == "admin" && pass == "1234") ||
+ (user == "ali" && pass == "1111")
+){
+  alert("Giriş başarılı");
+}
   }else{
     alert("Hatalı giriş");
   }
