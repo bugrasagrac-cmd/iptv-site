@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Kullanıcı Giriş</title>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+
+<style>
+body { font-family: Arial; text-align:center; background:#111; color:white; }
+input, button { padding:10px; margin:5px; width:250px; }
+textarea { width:90%; height:200px; margin-top:20px; }
+</style>
+</head>
+
+<body>
+
+<h1>Admin Panel</h1>
+
+<h3>Yayın Linki Gir</h3>
+
+<input id="link" placeholder="https://site-link.com"><br>
+
+<button onclick="olustur()">Kodu Oluştur</button>
+
+<h3>Oluşan Kod</h3>
+
+<textarea id="kod" readonly></textarea>
+
+<script>
+function olustur(){
+  let link = document.getElementById("link").value;
+
+  let code = `
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { margin:0; }
+iframe {
+  width:100%;
+  height:100vh;
+  border:none;
+}
+</style>
 </head>
 <body>
 
-<h2>Kullanıcı Girişi</h2>
+<iframe src="${link}"></iframe>
 
-<input type="text" id="user" placeholder="Kullanıcı adı"><br><br>
-<input type="password" id="pass" placeholder="Şifre"><br><br>
+</body>
+</html>
+`;
 
-<button onclick="login()">Giriş Yap</button>
-
-<script>
-function login(){
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
-
-  if(
- (user == "admin" && pass == "1234") ||
- (user == "ali" && pass == "1111")
-){
-  alert("Giriş başarılı");
-}
-  }else{
-    alert("Hatalı giriş");
-  }
+  document.getElementById("kod").value = code;
 }
 </script>
 
