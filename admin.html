@@ -1,136 +1,105 @@
-<!-- version 2 -->
+<!-- VERSION 999 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel</title>
+<title>ADMIN V2</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 body {
   margin:0;
   font-family: Arial;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+  background: linear-gradient(135deg, #ff00cc, #3333ff);
   color:white;
 }
 
-.container {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
-
 .box {
-  background:#111827;
+  width:350px;
+  margin:100px auto;
   padding:30px;
-  border-radius:15px;
-  width:320px;
+  background:rgba(0,0,0,0.7);
+  border-radius:20px;
   text-align:center;
-  box-shadow:0 0 25px rgba(0,0,0,0.6);
-}
-
-h2 {
-  margin-bottom:20px;
+  box-shadow:0 0 30px rgba(255,0,255,0.7);
 }
 
 input {
   width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
+  padding:10px;
+  margin:10px 0;
   border:none;
-  outline:none;
+  border-radius:10px;
 }
 
 button {
   width:100%;
-  padding:12px;
+  padding:10px;
   border:none;
   border-radius:10px;
-  background:#3b82f6;
+  background:#ff00cc;
   color:white;
-  font-weight:bold;
   cursor:pointer;
 }
 
-button:hover {
-  background:#2563eb;
-}
-
-.list {
-  margin-top:15px;
-  text-align:left;
-  font-size:14px;
-  max-height:150px;
-  overflow:auto;
+#panel {
+  display:none;
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
+<div class="box">
 
-<!-- LOGIN -->
-<div class="box" id="login">
-  <h2>Admin Giriş</h2>
-  <input id="pass" type="password" placeholder="Şifre">
-  <button onclick="giris()">Giriş Yap</button>
-</div>
+<h2>🔐 Admin Giriş</h2>
+<input type="password" id="sifre" placeholder="Şifre">
+<button onclick="giris()">Giriş Yap</button>
 
-<!-- PANEL -->
-<div class="box" id="panel" style="display:none;">
-  <h2>Kanal Yönetimi</h2>
+<div id="panel">
+<h2>📺 Kanal Ekle</h2>
+<input id="isim" placeholder="Kanal adı">
+<input id="url" placeholder="M3U8 link">
+<button onclick="ekle()">Ekle</button>
 
-  <input id="name" placeholder="Kanal adı">
-  <input id="url" placeholder="M3U8 link">
-  <button onclick="ekle()">Kanal Ekle</button>
-
-  <div class="list" id="liste"></div>
+<div id="liste"></div>
 </div>
 
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-const supabase = supabase.createClient(
+const supabase = window.supabase.createClient(
   "https://ycjhdiyvpymwlbycaznz.supabase.co",
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
-// giriş
 function giris(){
-  var p = document.getElementById("pass").value;
-
-  if(p === "1234"){
-    document.getElementById("login").style.display = "none";
+  if(document.getElementById("sifre").value === "1234"){
     document.getElementById("panel").style.display = "block";
-    listele();
+    alert("Giriş başarılı");
+    yukle();
   } else {
-    alert("Yanlış şifre");
+    alert("Şifre yanlış");
   }
 }
 
-// ekleme
 async function ekle(){
-  var name = document.getElementById("name").value;
-  var url = document.getElementById("url").value;
+  let isim = document.getElementById("isim").value;
+  let url = document.getElementById("url").value;
 
-  await supabase.from("channels").insert([{ name, url }]);
+  await supabase.from("channels").insert([{isim, url}]);
 
   alert("Eklendi");
-  listele();
+  yukle();
 }
 
-// listeleme
-async function listele(){
+async function yukle(){
   let { data } = await supabase.from("channels").select("*");
 
   let html = "";
-  data.forEach(x => {
-    html += "<div>• " + x.name + "</div>";
+  data.forEach(x=>{
+    html += "<p>"+x.isim+"</p>";
   });
 
   document.getElementById("liste").innerHTML = html;
