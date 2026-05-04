@@ -4,78 +4,109 @@
 <meta charset="UTF-8">
 <title>Admin Panel</title>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <style>
 body {
-  background:#111;
+  background:#0f172a;
   color:white;
-  text-align:center;
   font-family:Arial;
+  text-align:center;
 }
+
+.box {
+  background:#1e293b;
+  padding:15px;
+  margin:10px;
+  border-radius:10px;
+}
+
 input, button {
   padding:10px;
   margin:5px;
-  width:200px;
+  border:none;
+  border-radius:8px;
+}
+
+button {
+  background:#3b82f6;
+  color:white;
+  cursor:pointer;
 }
 </style>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 </head>
 
 <body>
 
-<h2>Admin Giriş</h2>
-<input id="pass" type="password" placeholder="Şifre">
-<br>
-<button onclick="giris()">Giriş</button>
+<h1>📺 Admin Panel</h1>
 
-<div id="panel" style="display:none;">
-  <h2>Kanal Ekle</h2>
-
-  <input id="name" placeholder="Kanal adı"><br>
-  <input id="url" placeholder="M3U8 link"><br>
-
+<!-- EKLE -->
+<div class="box">
+  <h3>Kanal Ekle</h3>
+  <input id="name" placeholder="Kanal adı">
+  <input id="url" placeholder="M3U8 link">
+  <br>
   <button onclick="ekle()">Ekle</button>
 </div>
 
+<!-- LİSTE -->
+<div id="liste"></div>
+
 <script>
-// 🔗 SUPABASE BAĞLANTI
-const supabaseClient = window.supabase.createClient(
+const supabase = window.supabase.createClient(
   "https://ycjhdiyvpymwlbycaznz.supabase.co",
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
-// 🔐 GİRİŞ
-function giris(){
-  const sifre = document.getElementById("pass").value;
-
-  if(sifre === "1234"){
-    document.getElementById("panel").style.display = "block";
-  } else {
-    alert("Yanlış şifre");
-  }
-}
-
-// ➕ KANAL EKLE
+// EKLE
 async function ekle(){
-  const name = document.getElementById("name").value;
-  const url = document.getElementById("url").value;
+  let name = document.getElementById("name").value;
+  let url = document.getElementById("url").value;
 
   if(!name || !url){
     alert("Boş bırakma");
     return;
   }
 
-  const { error } = await supabaseClient
+  const { error } = await supabase
     .from("channels")
-    .insert([{ name: name, url: url }]);
+    .insert([{ name, url }]);
 
   if(error){
     alert("Hata: " + error.message);
-  } else {
-    alert("Eklendi");
   }
+
+  yukle();
 }
+
+// SİL
+async function sil(id){
+  await supabase.from("channels").delete().eq("id", id);
+  yukle();
+}
+
+// LİSTELE
+async function yukle(){
+  let { data } = await supabase.from("channels").select("*");
+
+  let html = "";
+
+  data.forEach(x=>{
+    html += `
+      <div class="box">
+        <h3>${x.name}</h3>
+        <video src="${x.url}" controls width="300"></video>
+        <br>
+        <button onclick="sil(${x.id})">Sil</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("liste").innerHTML = html;
+}
+
+yukle();
 </script>
 
 </body>
