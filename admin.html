@@ -2,14 +2,72 @@
 <html>
 <head>
   <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 15px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .liste {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 14px;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Admin Panel</h1>
+<div class="box">
+  <h1>Admin Panel</h1>
 
-<input id="name" placeholder="Kanal adı">
-<input id="url" placeholder="M3U8 link">
-<button onclick="ekle()">Kanal Ekle</button>
+  <input id="name" placeholder="Kanal adı">
+  <input id="url" placeholder="M3U8 link">
+  <button onclick="ekle()">Kanal Ekle</button>
+
+  <div class="liste" id="liste"></div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -26,7 +84,21 @@ async function ekle(){
   await supabase.from("channels").insert([{ name, url }]);
 
   alert("Eklendi!");
+  listele();
 }
+
+async function listele(){
+  let { data } = await supabase.from("channels").select("*");
+
+  let html = "";
+  data.forEach(x => {
+    html += `<div>• ${x.name}</div>`;
+  });
+
+  document.getElementById("liste").innerHTML = html;
+}
+
+listele();
 </script>
 
 </body>
