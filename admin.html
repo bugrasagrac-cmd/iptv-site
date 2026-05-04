@@ -1,6 +1,47 @@
 <!DOCTYPE html>
 <html>
+<head><!DOCTYPE html>
+<html>
 <head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+body { background:#111; color:white; text-align:center; }
+input, button { padding:10px; margin:5px; }
+</style>
+</head>
+
+<body>
+
+<h1>Admin Panel</h1>
+
+<input id="name" placeholder="Kanal adı"><br>
+<input id="url" placeholder="m3u8 link"><br>
+
+<button onclick="ekle()">Kanal Ekle</button>
+
+<script>
+
+const supabase = supabase.createClient(
+  "https://ycjhdiyvpymwlbycaznz.supabase.co",
+  "BURAYA_KEY"
+);
+
+async function ekle(){
+  await supabase.from("channels").insert([
+    { name: name.value, url: url.value }
+  ]);
+
+  alert("Eklendi!");
+}
+
+</script>
+
+</body>
+</html>
 <meta charset="UTF-8">
 <title>Admin Panel</title>
 
