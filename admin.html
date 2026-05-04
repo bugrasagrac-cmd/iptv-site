@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <title>Admin Panel</title>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
 <style>
 body {
   background:#111;
@@ -16,45 +14,67 @@ body {
 input, button {
   padding:10px;
   margin:5px;
+  width:200px;
 }
 </style>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 </head>
 
 <body>
 
 <h2>Admin Giriş</h2>
-<input id="pass" type="password">
+<input id="pass" type="password" placeholder="Şifre">
+<br>
 <button onclick="giris()">Giriş</button>
 
 <div id="panel" style="display:none;">
   <h2>Kanal Ekle</h2>
+
   <input id="name" placeholder="Kanal adı"><br>
-  <input id="url" placeholder="m3u8 link"><br>
+  <input id="url" placeholder="M3U8 link"><br>
+
   <button onclick="ekle()">Ekle</button>
 </div>
 
 <script>
-const supabase = window.supabase.createClient(
+// 🔗 SUPABASE BAĞLANTI
+const supabaseClient = window.supabase.createClient(
   "https://ycjhdiyvpymwlbycaznz.supabase.co",
   "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
 );
 
+// 🔐 GİRİŞ
 function giris(){
-  if(document.getElementById("pass").value === "1234"){
+  const sifre = document.getElementById("pass").value;
+
+  if(sifre === "1234"){
     document.getElementById("panel").style.display = "block";
   } else {
     alert("Yanlış şifre");
   }
 }
 
+// ➕ KANAL EKLE
 async function ekle(){
-  let name = document.getElementById("name").value;
-  let url = document.getElementById("url").value;
+  const name = document.getElementById("name").value;
+  const url = document.getElementById("url").value;
 
-  await supabase.from("channels").insert([{ name, url }]);
+  if(!name || !url){
+    alert("Boş bırakma");
+    return;
+  }
 
-  alert("Eklendi");
+  const { error } = await supabaseClient
+    .from("channels")
+    .insert([{ name: name, url: url }]);
+
+  if(error){
+    alert("Hata: " + error.message);
+  } else {
+    alert("Eklendi");
+  }
 }
 </script>
 
