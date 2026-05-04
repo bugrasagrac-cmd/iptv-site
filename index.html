@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>IPTV</title>
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 </head>
+
 <body style="background:black;color:white;text-align:center">
 
+<h2>TEST ÇALIŞIYOR</h2>
 <h1>KANALLAR</h1>
-  <h2>TEST ÇALIŞIYOR</h2>
 
 <div id="liste"></div>
 
@@ -19,9 +22,25 @@ const supabase = window.supabase.createClient(
 );
 
 async function yukle(){
-  let { data } = await supabase.from("channels").select("*");
+  const { data, error } = await supabase
+    .from("channels")
+    .select("*");
+
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+
+  if(error){
+    document.getElementById("liste").innerHTML = "HATA: " + error.message;
+    return;
+  }
+
+  if(!data || data.length === 0){
+    document.getElementById("liste").innerHTML = "Veri yok";
+    return;
+  }
 
   let html = "";
+
   data.forEach(x=>{
     html += "<p>"+x.name+"</p>";
   });
