@@ -17,8 +17,8 @@ body{
 }
 
 .panel{
-  width:420px;
-  height:620px;
+  width:520px;
+  height:680px;
   background:#1a1a1a;
   border-radius:10px;
   display:flex;
@@ -43,93 +43,174 @@ body{
 .input input{flex:1;padding:10px;border:none;}
 .input button{width:80px;}
 
-.nick{
-  display:inline-block;
-  animation:acil 0.5s ease-out;
+.adminPanel{
+  background:#000;
+  padding:10px;
+  display:none;
 }
 
-@keyframes acil{
-  0%{transform:scaleX(0);opacity:0}
-  100%{transform:scaleX(1);opacity:1}
+/* ✨ SİMLİ */
+.simli{
+  background:linear-gradient(270deg,#fff,#0ff,#fff);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:flow 3s linear infinite;
+}
+@keyframes flow{
+  0%{background-position:0%}
+  100%{background-position:300%}
 }
 
-.anim{
-  width:40px;
-  vertical-align:middle;
+/* ❄️ KAR */
+.kar::after{
+  content:"❄ ❅ ❄";
+  position:absolute;
+  left:0;
+  width:100%;
+  animation:kar 2s linear infinite;
 }
+@keyframes kar{
+  0%{transform:translateY(-10px)}
+  100%{transform:translateY(15px)}
+}
+
+span{position:relative;}
 </style>
 </head>
 
 <body>
 
-<div>
+<div id="login">
 <input id="nick" placeholder="Nick"><br><br>
-<input id="adminpass" placeholder="Admin şifre"><br><br>
-
-<select id="anim">
-<option value="kid">👦 Çocuk Açıyor</option>
-<option value="car">🚗 Araba Geliyor</option>
-<option value="fire">🔥 Ateş Patlıyor</option>
-</select>
-
-<br><br>
+<input id="pass" placeholder="Şifre"><br><br>
 <button onclick="gir()">Giriş</button>
 </div>
 
 <div class="panel" id="chat" style="display:none;">
-  <div class="header">💬 Chat</div>
 
-  <div id="mesajlar" class="mesajlar"></div>
+<div class="header">💬 Ultra Chat</div>
 
-  <div class="input">
-    <input id="mesaj" placeholder="Mesaj yaz">
-    <button onclick="gonder()">Gönder</button>
-  </div>
+<div id="mesajlar" class="mesajlar"></div>
+
+<div class="input">
+<input id="mesaj" placeholder="Mesaj yaz">
+<button onclick="gonder()">Gönder</button>
+</div>
+
+<div id="adminPanel" class="adminPanel">
+<input id="hedef" placeholder="Nick yaz">
+<button onclick="adminYap()">👑 Admin Yap</button>
+<button onclick="modYap()">🛡 Mod Yap</button>
+<button onclick="banla()">🚫 Sustur</button>
+</div>
+
 </div>
 
 <script>
-let nick="", admin=false, anim="";
+let user = {
+  nick:"",
+  rol:"user"
+};
+
+let users = JSON.parse(localStorage.getItem("users") || "{}");
+let bans = JSON.parse(localStorage.getItem("bans") || "[]");
+
+function kaydet(){
+  localStorage.setItem("users", JSON.stringify(users));
+  localStorage.setItem("bans", JSON.stringify(bans));
+}
 
 function gir(){
-  nick=document.getElementById("nick").value;
-  anim=document.getElementById("anim").value;
-  let pass=document.getElementById("adminpass").value;
+  let n = document.getElementById("nick").value;
+  let p = document.getElementById("pass").value;
 
-  if(!nick) return;
+  if(!n) return;
 
-  admin = (pass==="1234");
+  user.nick = n;
 
+  // kayıtlı rol
+  if(users[n]){
+    user.rol = users[n];
+  }
+
+  // admin şifre
+  if(p === "1234"){
+    user.rol = "admin";
+    users[n] = "admin";
+    kaydet();
+  }
+
+  if(user.rol === "admin"){
+    document.getElementById("adminPanel").style.display="block";
+  }
+
+  document.getElementById("login").style.display="none";
   document.getElementById("chat").style.display="flex";
 }
 
 function gonder(){
-  let mesaj=document.getElementById("mesaj").value;
-  if(!mesaj) return;
+  let msg = document.getElementById("mesaj").value;
+  if(!msg) return;
 
-  let gif="";
-
-  if(anim==="kid"){
-    gif="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif";
-  }
-  if(anim==="car"){
-    gif="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif";
-  }
-  if(anim==="fire"){
-    gif="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif";
+  if(bans.includes(user.nick)){
+    alert("Susturuldun");
+    return;
   }
 
-  let html = "<p>";
+  let nickHTML = user.nick;
 
-  if(admin){
-    html += "<img class='anim' src='"+gif+"'> ";
-    html += "<span class='nick'>👑 "+nick+"</span>";
-  } else {
-    html += nick;
+  if(user.rol === "admin"){
+    nickHTML = "<span class='simli kar'>👑 "+user.nick+"</span>";
   }
 
-  html += ": " + mesaj + "</p>";
+  if(user.rol === "mod"){
+    nickHTML = "<span class='simli'>🛡 "+user.nick+"</span>";
+  }
 
-  document.getElementById("mesajlar").innerHTML += html;
+  document.getElementById("mesajlar").innerHTML +=
+    "<p>"+nickHTML+": "+msg+"</p>";
+}
+
+function adminYap(){
+  let hedef = document.getElementById("hedef").value;
+  if(!hedef) return;
+
+  users[hedef] = "admin";
+  kaydet();
+
+  if(hedef === user.nick){
+    user.rol = "admin";
+    document.getElementById("adminPanel").style.display="block";
+  }
+
+  alert("Admin verildi");
+}
+
+function modYap(){
+  let hedef = document.getElementById("hedef").value;
+  if(!hedef) return;
+
+  users[hedef] = "mod";
+  kaydet();
+
+  if(hedef === user.nick){
+    user.rol = "mod";
+  }
+
+  alert("Mod verildi");
+}
+
+function banla(){
+  let hedef = document.getElementById("hedef").value;
+  if(!hedef) return;
+
+  if(!bans.includes(hedef)){
+    bans.push(hedef);
+    kaydet();
+  }
+
+  alert("Susturuldu");
 }
 </script>
 
