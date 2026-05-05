@@ -12,63 +12,43 @@ body{
   font-family:Arial;
 }
 
-/* ✨ simli yazı */
+/* ✨ SIMLI */
 .parlak {
-  position: relative;
-  font-size:28px;
-  font-weight:bold;
-  color:white;
-  text-shadow:0 0 10px white, 0 0 20px cyan;
+  background: linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:parlat 3s linear infinite;
 }
 
-/* ❄️ kar efekti */
-.parlak::after {
+@keyframes parlat {
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+
+/* ❄️ KAR */
+.kar::after {
   content:"❄ ❅ ❄ ❅ ❄";
   position:absolute;
-  top:-10px;
   left:0;
   width:100%;
-  font-size:14px;
-  animation: snow 3s linear infinite;
-  opacity:0.8;
+  animation:snow 3s linear infinite;
 }
 
 @keyframes snow {
   0%{transform:translateY(-10px);}
-  100%{transform:translateY(25px);}
+  100%{transform:translateY(20px);}
 }
 
-/* ✨ yıldız efekti */
-.yildiz {
-  position: relative;
-  color:yellow;
-  text-shadow:0 0 10px yellow;
-}
-
-.yildiz::after {
-  content:"✨ ✨ ✨";
-  position:absolute;
-  left:0;
-  top:-5px;
-  width:100%;
-  animation: star 2s infinite;
-}
-
-@keyframes star {
-  0%{opacity:0;}
-  50%{opacity:1;}
-  100%{opacity:0;}
-}
-
-/* 🔥 alev */
+/* 🔥 ALEV */
 .ates {
-  color: orange;
+  color:orange;
   text-shadow:
     0 0 5px red,
     0 0 10px orange,
     0 0 20px red,
     0 0 30px orange;
-  animation: atesAnim 0.3s infinite alternate;
+  animation:atesAnim 0.3s infinite alternate;
 }
 
 @keyframes atesAnim {
@@ -85,6 +65,25 @@ body{
       0 0 30px orange;
   }
 }
+
+/* ✨ YILDIZ */
+.yildiz::after {
+  content:"✨ ✨ ✨";
+  position:absolute;
+  left:0;
+  width:100%;
+  animation:star 2s infinite;
+}
+
+@keyframes star {
+  0%{opacity:0;}
+  50%{opacity:1;}
+  100%{opacity:0;}
+}
+
+span {
+  position:relative;
+}
 </style>
 
 </head>
@@ -93,14 +92,15 @@ body{
 
 <h1>💬 Ultra Chat</h1>
 
-<input id="nick" placeholder="Nick yaz">
+<input id="nick" placeholder="Nick yaz"><br><br>
 
-<br><br>
+<input id="adminpass" placeholder="Admin şifre (opsiyonel)"><br><br>
 
 <select id="efekt">
-<option value="parlak">❄️ Kar Simli</option>
-<option value="yildiz">✨ Yıldızlı</option>
+<option value="parlak">✨ Simli</option>
 <option value="ates">🔥 Alev</option>
+<option value="yildiz">✨ Yıldız</option>
+<option value="parlak kar">❄️ Simli Kar</option>
 </select>
 
 <br><br>
@@ -119,26 +119,47 @@ body{
 <script>
 let nick="";
 let efekt="";
+let admin=false;
 
 function gir(){
   nick=document.getElementById("nick").value;
   efekt=document.getElementById("efekt").value;
+  let pass=document.getElementById("adminpass").value;
 
-  if(!nick){ alert("Nick gir"); return; }
+  if(!nick){
+    alert("Nick gir");
+    return;
+  }
+
+  // 🔐 ADMIN
+  if(pass === "1234"){
+    admin = true;
+  } else {
+    admin = false;
+  }
 
   document.getElementById("chat").style.display="block";
 
-  document.getElementById("nickgoster").innerHTML =
-    "<span class='"+efekt+"'>"+nick+"</span>";
+  if(admin){
+    document.getElementById("nickgoster").innerHTML =
+      "<span class='"+efekt+"'>👑 "+nick+"</span>";
+  } else {
+    document.getElementById("nickgoster").innerHTML =
+      nick;
+  }
 }
 
 function gonder(){
   let mesaj=document.getElementById("mesaj").value;
-
   if(!mesaj) return;
 
-  document.getElementById("mesajlar").innerHTML +=
-    "<p><span class='"+efekt+"'>"+nick+":</span> "+mesaj+"</p>";
+  if(admin){
+    document.getElementById("mesajlar").innerHTML +=
+      "<p><span class='"+efekt+"'>👑 "+nick+":</span> "+mesaj+"</p>";
+  } else {
+    document.getElementById("mesajlar").innerHTML +=
+      "<p>"+nick+": "+mesaj+"</p>";
+  }
 }
 </script>
 
