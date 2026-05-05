@@ -16,10 +16,9 @@ body{
   color:white;
 }
 
-/* PANEL */
 .panel{
-  width:400px;
-  height:600px;
+  width:420px;
+  height:620px;
   background:#1a1a1a;
   border-radius:10px;
   display:flex;
@@ -44,74 +43,65 @@ body{
 .input input{flex:1;padding:10px;border:none;}
 .input button{width:80px;}
 
-span{position:relative;display:inline-block;}
+span{position:relative;display:inline-block}
 
-/* ✨ SİMLİ */
+/* ✨ simli */
 .simli{
-  background:linear-gradient(270deg,#FFD700,#FFF8DC,#FFD700);
+  background:linear-gradient(270deg,#FFD700,#fff,#FFD700);
   background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   animation:flow 3s linear infinite;
 }
-
 @keyframes flow{
   0%{background-position:0%}
   100%{background-position:300%}
 }
 
-/* ⚽ RONALDO SIUUU EFFECT */
-.ronaldo{
-  animation:siuuu 1s ease-out;
+/* ⚽ giriş animasyonu */
+.giris{
+  animation:giris 0.8s ease-out;
+}
+@keyframes giris{
+  0%{transform:translateY(-100px);opacity:0}
+  100%{transform:translateY(0);opacity:1}
 }
 
-@keyframes siuuu{
-  0%{
-    transform:translateY(-150px) scale(0.5);
-    opacity:0;
-  }
-  40%{
-    transform:translateY(0px) scale(1.3);
-  }
-  60%{
-    transform:scale(0.9);
-  }
-  100%{
-    transform:scale(1);
-    opacity:1;
-  }
+/* 🚗 sağdan giriş */
+.araba{
+  animation:araba 0.8s ease-out;
+}
+@keyframes araba{
+  0%{transform:translateX(-200px);opacity:0}
+  100%{transform:translateX(0);opacity:1}
 }
 
-/* 💥 PATLAMA */
-.ronaldo::after{
+/* 💥 patlama */
+.patla::after{
   content:"💥";
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  top:-20px;
-  animation:patla 1s ease-out;
+  top:-15px;
+  animation:patla 0.8s;
 }
-
 @keyframes patla{
-  0%{opacity:1; transform:scale(0);}
-  100%{opacity:0; transform:scale(2);}
+  0%{opacity:1;transform:scale(0)}
+  100%{opacity:0;transform:scale(2)}
 }
 
-/* 🔊 SIUUU YAZISI */
-.ronaldo::before{
-  content:"SIUUU!";
+/* 🎉 yıldız */
+.yildiz::after{
+  content:"✨✨";
   position:absolute;
-  top:-30px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:10px;
-  color:yellow;
-  animation:yazi 1s ease-out;
+  left:0;
+  width:100%;
+  animation:yildiz 1s infinite;
 }
-
-@keyframes yazi{
-  0%{opacity:0; transform:translate(-50%,10px);}
-  100%{opacity:1; transform:translate(-50%,-10px);}
+@keyframes yildiz{
+  0%{opacity:0}
+  50%{opacity:1}
+  100%{opacity:0}
 }
 </style>
 </head>
@@ -121,11 +111,34 @@ span{position:relative;display:inline-block;}
 <div>
 <input id="nick" placeholder="Nick"><br><br>
 <input id="adminpass" placeholder="Admin şifre"><br><br>
+
+<!-- 🎭 KARAKTER -->
+<select id="char">
+<option value="⚽">⚽ Futbolcu</option>
+<option value="🔥">🔥 Ateş Adam</option>
+<option value="🚗">🚗 Araba</option>
+<option value="👑">👑 Kral</option>
+<option value="😈">😈 Şeytan</option>
+<option value="🤖">🤖 Robot</option>
+</select>
+
+<br><br>
+
+<!-- 🎬 ANİMASYON -->
+<select id="anim">
+<option value="giris">⚽ Yukarıdan Giriş</option>
+<option value="araba">🚗 Soldan Giriş</option>
+<option value="giris patla">💥 Giriş + Patlama</option>
+<option value="giris yildiz">✨ Parlama</option>
+<option value="araba patla">🚗💥 Araba Patlama</option>
+</select>
+
+<br><br>
 <button onclick="gir()">Giriş</button>
 </div>
 
 <div class="panel" id="chat" style="display:none;">
-  <div class="header">⚽ SIUUU Chat</div>
+  <div class="header">💬 Chat</div>
 
   <div id="mesajlar" class="mesajlar"></div>
 
@@ -136,11 +149,12 @@ span{position:relative;display:inline-block;}
 </div>
 
 <script>
-let nick="";
-let admin=false;
+let nick="", admin=false, char="", anim="";
 
 function gir(){
   nick=document.getElementById("nick").value;
+  char=document.getElementById("char").value;
+  anim=document.getElementById("anim").value;
   let pass=document.getElementById("adminpass").value;
 
   if(!nick) return;
@@ -157,7 +171,7 @@ function gonder(){
   let nickHTML = nick;
 
   if(admin){
-    nickHTML = "<span class='ronaldo simli'>👑 "+nick+"</span>";
+    nickHTML = "<span class='"+anim+" simli'>"+char+" "+nick+"</span>";
   }
 
   document.getElementById("mesajlar").innerHTML +=
