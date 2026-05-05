@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ÇATLI TV Logo</title>
+
+<style>
+body{
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+/* LOGO KUTUSU */
+.logo{
+  position:relative;
+  padding:20px 40px;
+  border:2px solid #fff;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 0 20px #0ff;
+}
+
+/* ARKA PLAN AKIŞ */
+.logo::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:200%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,#00ffff55,transparent);
+  animation:slide 3s linear infinite;
+}
+
+@keyframes slide{
+  0%{left:-100%}
+  100%{left:100%}
+}
+
+/* YAZI */
+.text{
+  font-size:40px;
+  font-weight:bold;
+  font-family:Arial, sans-serif;
+  letter-spacing:3px;
+
+  background:linear-gradient(270deg,#FFD700,#00FFFF,#FF0000,#FFD700);
+  background-size:600%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  animation:flow 5s linear infinite;
+}
+
+@keyframes flow{
+  0%{background-position:0%}
+  100%{background-position:600%}
+}
+
+/* TV YAZISI */
+.tv{
+  font-size:16px;
+  text-align:center;
+  color:#fff;
+  margin-top:5px;
+  letter-spacing:4px;
+  animation:blink 1.5s infinite;
+}
+
+@keyframes blink{
+  0%,100%{opacity:1}
+  50%{opacity:0.3}
+}
+
+/* PARILTI */
+.spark{
+  position:absolute;
+  top:-10px;
+  right:-10px;
+  font-size:20px;
+  animation:spark 1.5s infinite;
+}
+
+@keyframes spark{
+  0%{transform:scale(0)}
+  50%{transform:scale(1)}
+  100%{transform:scale(0)}
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="logo">
+  <div class="spark">✨</div>
+  <div class="text">ÇATLI</div>
+  <div class="tv">TV</div>
+</div>
+
+</body>
+</html>
