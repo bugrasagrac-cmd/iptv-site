@@ -6,114 +6,151 @@
 
 <style>
 body{
-  background:black;
-  color:white;
-  text-align:center;
+  background:#111;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
   font-family:Arial;
+  color:white;
+}
+
+.panel{
+  width:400px;
+  height:600px;
+  background:#1a1a1a;
+  border-radius:10px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.header{
+  background:#222;
+  padding:10px;
+  text-align:center;
+}
+
+.mesajlar{
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+.input{
+  display:flex;
+}
+
+.input input{
+  flex:1;
+  padding:10px;
+  border:none;
+}
+
+.input button{
+  width:80px;
 }
 
 /* ✨ SIMLI */
-.parlak {
-  background: linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
+.parlak{
+  background:linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
   background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:parlat 3s linear infinite;
+  animation:parla 3s linear infinite;
 }
-
-@keyframes parlat {
+@keyframes parla{
   0%{background-position:0%}
   100%{background-position:300%}
 }
 
+/* 🔥 ALEV */
+.ates{
+  color:orange;
+  animation:ates 0.3s infinite alternate;
+}
+@keyframes ates{
+  0%{text-shadow:0 0 5px red}
+  100%{text-shadow:0 0 15px yellow}
+}
+
 /* ❄️ KAR */
-.kar::after {
-  content:"❄ ❅ ❄ ❅ ❄";
+.kar::after{
+  content:"❄ ❅ ❄";
   position:absolute;
   left:0;
   width:100%;
   animation:snow 3s linear infinite;
 }
-
-@keyframes snow {
-  0%{transform:translateY(-10px);}
-  100%{transform:translateY(20px);}
+@keyframes snow{
+  0%{transform:translateY(-10px)}
+  100%{transform:translateY(20px)}
 }
 
-/* 🔥 ALEV */
-.ates {
-  color:orange;
-  text-shadow:
-    0 0 5px red,
-    0 0 10px orange,
-    0 0 20px red,
-    0 0 30px orange;
-  animation:atesAnim 0.3s infinite alternate;
+/* 🌈 RAINBOW */
+.rainbow{
+  background:linear-gradient(90deg,red,orange,yellow,green,blue,purple);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-@keyframes atesAnim {
-  0% {
-    text-shadow:
-      0 0 5px red,
-      0 0 10px orange,
-      0 0 20px red;
-  }
-  100% {
-    text-shadow:
-      0 0 10px yellow,
-      0 0 20px red,
-      0 0 30px orange;
-  }
+/* 💎 NEON */
+.neon{
+  color:#0ff;
+  text-shadow:0 0 10px #0ff,0 0 20px #0ff;
 }
 
-/* ✨ YILDIZ */
-.yildiz::after {
-  content:"✨ ✨ ✨";
-  position:absolute;
-  left:0;
-  width:100%;
-  animation:star 2s infinite;
+/* ⚡ ELEKTRIK */
+.elektrik{
+  color:yellow;
+  animation:blink 0.2s infinite;
+}
+@keyframes blink{
+  0%{opacity:1}
+  50%{opacity:0.5}
+  100%{opacity:1}
 }
 
-@keyframes star {
-  0%{opacity:0;}
-  50%{opacity:1;}
-  100%{opacity:0;}
-}
-
-span {
-  position:relative;
-}
+span{position:relative;}
 </style>
-
 </head>
 
 <body>
 
-<h1>💬 Ultra Chat</h1>
-
-<input id="nick" placeholder="Nick yaz"><br><br>
-
-<input id="adminpass" placeholder="Admin şifre (opsiyonel)"><br><br>
+<div>
+<input id="nick" placeholder="Nick"><br><br>
+<input id="adminpass" placeholder="Admin şifre"><br><br>
 
 <select id="efekt">
 <option value="parlak">✨ Simli</option>
 <option value="ates">🔥 Alev</option>
-<option value="yildiz">✨ Yıldız</option>
+<option value="parlak ates">🔥✨ Alev+Simli</option>
+<option value="rainbow">🌈 Rainbow</option>
+<option value="rainbow ates">🌈🔥 Rainbow+Alev</option>
+<option value="neon">💎 Neon</option>
+<option value="neon ates">💎🔥 Neon+Alev</option>
 <option value="parlak kar">❄️ Simli Kar</option>
+<option value="rainbow kar">🌈❄️ Rainbow Kar</option>
+<option value="neon elektrik">💎⚡ Neon Elektrik</option>
+<option value="parlak elektrik">✨⚡ Simli Elektrik</option>
+<option value="rainbow elektrik">🌈⚡ Rainbow Elektrik</option>
+<option value="parlak neon ates">🔥💎✨ FULL</option>
 </select>
 
 <br><br>
-
 <button onclick="gir()">Giriş</button>
+</div>
 
-<div id="chat" style="display:none;">
-  <h2 id="nickgoster"></h2>
+<div class="panel" id="chat" style="display:none;">
+  <div class="header">💬 Chat</div>
 
-  <input id="mesaj" placeholder="Mesaj yaz">
-  <button onclick="gonder()">Gönder</button>
+  <div id="mesajlar" class="mesajlar"></div>
 
-  <div id="mesajlar"></div>
+  <div class="input">
+    <input id="mesaj" placeholder="Mesaj yaz">
+    <button onclick="gonder()">Gönder</button>
+  </div>
 </div>
 
 <script>
@@ -126,27 +163,11 @@ function gir(){
   efekt=document.getElementById("efekt").value;
   let pass=document.getElementById("adminpass").value;
 
-  if(!nick){
-    alert("Nick gir");
-    return;
-  }
+  if(!nick) return;
 
-  // 🔐 ADMIN
-  if(pass === "1234"){
-    admin = true;
-  } else {
-    admin = false;
-  }
+  if(pass==="1234"){admin=true;} else {admin=false;}
 
-  document.getElementById("chat").style.display="block";
-
-  if(admin){
-    document.getElementById("nickgoster").innerHTML =
-      "<span class='"+efekt+"'>👑 "+nick+"</span>";
-  } else {
-    document.getElementById("nickgoster").innerHTML =
-      nick;
-  }
+  document.getElementById("chat").style.display="flex";
 }
 
 function gonder(){
