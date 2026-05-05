@@ -12,51 +12,60 @@ body{
   font-family:Arial;
 }
 
-/* 🔥 efektler */
+/* ✨ simli yazı */
 .parlak {
-  background: linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
-  background-size:300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:parlat 3s linear infinite;
+  position: relative;
+  font-size:28px;
+  font-weight:bold;
+  color:white;
+  text-shadow:0 0 10px white, 0 0 20px cyan;
 }
 
-@keyframes parlat {
-  0%{background-position:0%}
-  100%{background-position:300%}
+/* ❄️ kar efekti */
+.parlak::after {
+  content:"❄ ❅ ❄ ❅ ❄";
+  position:absolute;
+  top:-10px;
+  left:0;
+  width:100%;
+  font-size:14px;
+  animation: snow 3s linear infinite;
+  opacity:0.8;
 }
 
-.ates { color: orange; text-shadow:0 0 10px red,0 0 20px orange;}
-.neon { color:#0ff; text-shadow:0 0 10px #0ff,0 0 20px #0ff;}
-.altin {
-  background:linear-gradient(gold,orange,gold);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.gumus { color:silver; }
-.kirmizi { color:red; }
-.mavi { color:cyan; }
-.yesil { color:lime; }
-.mor { color:violet; }
-.pembe { color:pink; }
-
-.rainbow {
-  background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+@keyframes snow {
+  0%{transform:translateY(-10px);}
+  100%{transform:translateY(25px);}
 }
 
-.buz { color:#aef; text-shadow:0 0 10px #aef;}
-.elektrik { color:#ff0; text-shadow:0 0 10px yellow;}
-.golge { text-shadow:2px 2px 5px black;}
-.parlak2 { text-shadow:0 0 15px white;}
-.karanlik { color:#555;}
-.beyaz { color:white;}
-.gradyan {
-  background:linear-gradient(purple,cyan);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+/* ✨ yıldız efekti */
+.yildiz {
+  position: relative;
+  color:yellow;
+  text-shadow:0 0 10px yellow;
 }
+
+.yildiz::after {
+  content:"✨ ✨ ✨";
+  position:absolute;
+  left:0;
+  top:-5px;
+  width:100%;
+  animation: star 2s infinite;
+}
+
+@keyframes star {
+  0%{opacity:0;}
+  50%{opacity:1;}
+  100%{opacity:0;}
+}
+
+/* 🔥 alev */
+.ates {
+  color:orange;
+  text-shadow:0 0 10px red,0 0 20px orange;
+}
+
 </style>
 
 </head>
@@ -70,24 +79,9 @@ body{
 <br><br>
 
 <select id="efekt">
-<option value="parlak">✨ Simli</option>
+<option value="parlak">❄️ Kar Simli</option>
+<option value="yildiz">✨ Yıldızlı</option>
 <option value="ates">🔥 Alev</option>
-<option value="neon">💎 Neon</option>
-<option value="altin">🥇 Altın</option>
-<option value="gumus">🥈 Gümüş</option>
-<option value="kirmizi">❤️ Kırmızı</option>
-<option value="mavi">💙 Mavi</option>
-<option value="yesil">💚 Yeşil</option>
-<option value="mor">💜 Mor</option>
-<option value="pembe">💖 Pembe</option>
-<option value="rainbow">🌈 Rainbow</option>
-<option value="buz">🧊 Buz</option>
-<option value="elektrik">⚡ Elektrik</option>
-<option value="golge">🌑 Gölge</option>
-<option value="parlak2">🌟 Glow</option>
-<option value="karanlik">🌚 Dark</option>
-<option value="beyaz">⚪ Beyaz</option>
-<option value="gradyan">🎨 Gradient</option>
 </select>
 
 <br><br>
@@ -115,7 +109,7 @@ function gir(){
 
   document.getElementById("chat").style.display="block";
 
-  document.getElementById("nickgoster").innerHTML=
+  document.getElementById("nickgoster").innerHTML =
     "<span class='"+efekt+"'>"+nick+"</span>";
 }
 
@@ -124,7 +118,7 @@ function gonder(){
 
   if(!mesaj) return;
 
-  document.getElementById("mesajlar").innerHTML+=
+  document.getElementById("mesajlar").innerHTML +=
     "<p><span class='"+efekt+"'>"+nick+":</span> "+mesaj+"</p>";
 }
 </script>
