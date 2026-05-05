@@ -62,10 +62,29 @@ body{
 
 /* 🔥 alev */
 .ates {
-  color:orange;
-  text-shadow:0 0 10px red,0 0 20px orange;
+  color: orange;
+  text-shadow:
+    0 0 5px red,
+    0 0 10px orange,
+    0 0 20px red,
+    0 0 30px orange;
+  animation: atesAnim 0.3s infinite alternate;
 }
 
+@keyframes atesAnim {
+  0% {
+    text-shadow:
+      0 0 5px red,
+      0 0 10px orange,
+      0 0 20px red;
+  }
+  100% {
+    text-shadow:
+      0 0 10px yellow,
+      0 0 20px red,
+      0 0 30px orange;
+  }
+}
 </style>
 
 </head>
