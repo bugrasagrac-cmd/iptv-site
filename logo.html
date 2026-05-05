@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ÇATLI TV Logo</title>
+<title>ÇATLI TV</title>
 
 <style>
 body{
@@ -12,83 +12,93 @@ body{
   align-items:center;
   height:100vh;
   margin:0;
+  overflow:hidden;
 }
 
-/* LOGO KUTUSU */
+/* LOGO */
 .logo{
   position:relative;
-  padding:20px 40px;
-  border:2px solid #fff;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 0 20px #0ff;
-}
-
-/* ARKA PLAN AKIŞ */
-.logo::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:200%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,#00ffff55,transparent);
-  animation:slide 3s linear infinite;
-}
-
-@keyframes slide{
-  0%{left:-100%}
-  100%{left:100%}
-}
-
-/* YAZI */
-.text{
-  font-size:40px;
+  font-size:50px;
   font-weight:bold;
-  font-family:Arial, sans-serif;
-  letter-spacing:3px;
+  font-family:Arial;
+  letter-spacing:5px;
+  color:white;
+}
 
-  background:linear-gradient(270deg,#FFD700,#00FFFF,#FF0000,#FFD700);
-  background-size:600%;
+/* SİMLİ */
+.text{
+  background:linear-gradient(270deg,#FFD700,#00FFFF,#FFD700);
+  background-size:400%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-
   animation:flow 5s linear infinite;
 }
 
 @keyframes flow{
   0%{background-position:0%}
-  100%{background-position:600%}
+  100%{background-position:400%}
 }
 
-/* TV YAZISI */
-.tv{
-  font-size:16px;
-  text-align:center;
-  color:#fff;
-  margin-top:5px;
-  letter-spacing:4px;
-  animation:blink 1.5s infinite;
-}
-
-@keyframes blink{
-  0%,100%{opacity:1}
-  50%{opacity:0.3}
-}
-
-/* PARILTI */
-.spark{
+/* TOP */
+.ball{
   position:absolute;
-  top:-10px;
-  right:-10px;
-  font-size:20px;
-  animation:spark 1.5s infinite;
+  left:-100px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:30px;
+  animation:shoot 2s linear infinite;
 }
 
-@keyframes spark{
-  0%{transform:scale(0)}
-  50%{transform:scale(1)}
-  100%{transform:scale(0)}
+@keyframes shoot{
+  0%{
+    left:-100px;
+    transform:translateY(-50%) scale(0.8);
+  }
+  40%{
+    left:40%;
+    transform:translateY(-50%) scale(1.2);
+  }
+  70%{
+    left:55%;
+    transform:translateY(-50%) scale(1);
+  }
+  100%{
+    left:120%;
+    transform:translateY(-50%) scale(0.5);
+  }
+}
+
+/* PATLAMA */
+.impact{
+  position:absolute;
+  left:52%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-size:30px;
+  opacity:0;
+  animation:impact 2s linear infinite;
+}
+
+@keyframes impact{
+  0%,50%,100%{opacity:0}
+  55%{opacity:1; transform:translate(-50%,-50%) scale(1.5)}
+}
+
+/* Ç PARLAMA */
+.c-glow{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-size:50px;
+  color:#0ff;
+  opacity:0;
+  animation:cGlow 2s linear infinite;
+}
+
+@keyframes cGlow{
+  0%,60%,100%{opacity:0}
+  65%{opacity:1; text-shadow:0 0 20px #0ff;}
 }
 </style>
 
@@ -97,9 +107,16 @@ body{
 <body>
 
 <div class="logo">
-  <div class="spark">✨</div>
-  <div class="text">ÇATLI</div>
-  <div class="tv">TV</div>
+  <span class="text">ÇATLI TV</span>
+
+  <!-- ⚽ TOP -->
+  <div class="ball">⚽</div>
+
+  <!-- 💥 ÇARPMA -->
+  <div class="impact">💥</div>
+
+  <!-- 🔤 Ç PARLAMA -->
+  <div class="c-glow">Ç</div>
 </div>
 
 </body>
