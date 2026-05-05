@@ -49,7 +49,6 @@ body{
   display:none;
 }
 
-/* ✨ SİMLİ */
 .simli{
   background:linear-gradient(270deg,#fff,#0ff,#fff);
   background-size:300%;
@@ -57,12 +56,12 @@ body{
   -webkit-text-fill-color:transparent;
   animation:flow 3s linear infinite;
 }
+
 @keyframes flow{
   0%{background-position:0%}
   100%{background-position:300%}
 }
 
-/* ❄️ KAR */
 .kar::after{
   content:"❄ ❅ ❄";
   position:absolute;
@@ -70,6 +69,7 @@ body{
   width:100%;
   animation:kar 2s linear infinite;
 }
+
 @keyframes kar{
   0%{transform:translateY(-10px)}
   100%{transform:translateY(15px)}
@@ -84,7 +84,7 @@ span{position:relative;}
 <div id="login">
 <input id="nick" placeholder="Nick"><br><br>
 <input id="pass" placeholder="Şifre"><br><br>
-<button onclick="gir()">Giriş</button>
+<button id="girisBtn">Giriş</button>
 </div>
 
 <div class="panel" id="chat" style="display:none;">
@@ -95,20 +95,20 @@ span{position:relative;}
 
 <div class="input">
 <input id="mesaj" placeholder="Mesaj yaz">
-<button onclick="gonder()">Gönder</button>
+<button id="gonderBtn">Gönder</button>
 </div>
 
 <div id="adminPanel" class="adminPanel">
 <input id="hedef" placeholder="Nick yaz"><br><br>
 
-<button onclick="adminYap()">👑 Admin Yap</button>
-<button onclick="modYap()">🛡 Mod Yap</button>
-<button onclick="rolKaldir()">❌ Rol Kaldır</button>
+<button id="adminBtn">👑 Admin Yap</button>
+<button id="modBtn">🛡 Mod Yap</button>
+<button id="rolSilBtn">❌ Rol Kaldır</button>
 
 <br><br>
 
-<button onclick="banla()">🚫 Sustur</button>
-<button onclick="unban()">✅ Sustur Kaldır</button>
+<button id="banBtn">🚫 Sustur</button>
+<button id="unbanBtn">✅ Sustur Kaldır</button>
 
 <br><br>
 
@@ -133,7 +133,10 @@ function gir(){
   let n = document.getElementById("nick").value;
   let p = document.getElementById("pass").value;
 
-  if(!n) return;
+  if(!n){
+    alert("Nick gir");
+    return;
+  }
 
   user.nick = n;
 
@@ -183,60 +186,59 @@ function gonder(){
 function adminYap(){
   let h = document.getElementById("hedef").value;
   if(!h) return;
-
   users[h] = "admin";
   kaydet();
-
-  if(h === user.nick){
-    user.rol = "admin";
-    document.getElementById("adminPanel").style.display="block";
-  }
-
-  alert("Admin verildi");
 }
 
 function modYap(){
   let h = document.getElementById("hedef").value;
   if(!h) return;
-
   users[h] = "mod";
   kaydet();
-
-  if(h === user.nick){
-    user.rol = "mod";
-  }
-
-  alert("Mod verildi");
 }
 
 function rolKaldir(){
   let h = document.getElementById("hedef").value;
   if(!h) return;
-
   delete users[h];
   kaydet();
-
-  if(h === user.nick){
-    user.rol = "user";
-  }
-
-  alert("Rol kaldırıldı");
 }
 
 function banla(){
   let h = document.getElementById("hedef").value;
   if(!h) return;
-
   if(!bans.includes(h)){
     bans.push(h);
     kaydet();
   }
-
-  alert("Susturuldu");
 }
 
 function unban(){
   let h = document.getElementById("hedef").value;
   if(!h) return;
+  bans = bans.filter(u => u !== h);
+  kaydet();
+}
 
-  bans = bans.filter(u
+function listeGuncelle(){
+  let html = "<b>👥 Roller:</b><br>";
+  for(let u in users){
+    html += u + " - " + users[u] + "<br>";
+  }
+  html += "<br><b>🚫 Banlılar:</b><br>";
+  bans.forEach(b => html += b + "<br>");
+  document.getElementById("liste").innerHTML = html;
+}
+
+/* EVENTLER */
+document.getElementById("girisBtn").onclick = gir;
+document.getElementById("gonderBtn").onclick = gonder;
+document.getElementById("adminBtn").onclick = adminYap;
+document.getElementById("modBtn").onclick = modYap;
+document.getElementById("rolSilBtn").onclick = rolKaldir;
+document.getElementById("banBtn").onclick = banla;
+document.getElementById("unbanBtn").onclick = unban;
+</script>
+
+</body>
+</html>
