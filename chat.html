@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Chat</title>
+
+<style>
+body{
+  background:black;
+  color:white;
+  text-align:center;
+  font-family:Arial;
+}
+
+/* ✨ IŞILTILI EFEKT */
+.parlak {
+  font-size:28px;
+  font-weight:bold;
+  background: linear-gradient(90deg, #fff, #0ff, #f0f, #fff);
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: parlat 3s linear infinite;
+}
+
+@keyframes parlat {
+  0% { background-position: 0% }
+  100% { background-position: 300% }
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>✨ Chat</h1>
+
+<input id="nick" placeholder="Nick yaz">
+<button onclick="gir()">Giriş</button>
+
+<div id="chat" style="display:none;">
+  <h2 id="nickgoster"></h2>
+
+  <input id="mesaj" placeholder="Mesaj yaz">
+  <button onclick="gonder()">Gönder</button>
+
+  <div id="mesajlar"></div>
+</div>
+
+<script>
+let nick = "";
+
+function gir(){
+  nick = document.getElementById("nick").value;
+
+  if(!nick){
+    alert("Nick gir");
+    return;
+  }
+
+  document.getElementById("chat").style.display = "block";
+
+  document.getElementById("nickgoster").innerHTML =
+    "<span class='parlak'>" + nick + "</span>";
+}
+
+function gonder(){
+  let mesaj = document.getElementById("mesaj").value;
+
+  if(!mesaj) return;
+
+  document.getElementById("mesajlar").innerHTML +=
+    "<p><span class='parlak'>" + nick + ":</span> " + mesaj + "</p>";
+}
+</script>
+
+</body>
+</html>
