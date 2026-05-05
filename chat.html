@@ -12,15 +12,27 @@ body{
   font-family:Arial;
 }
 
-/* ✨ IŞILTILI EFEKT */
+/* ✨ efektler */
 .parlak {
-  font-size:28px;
-  font-weight:bold;
   background: linear-gradient(90deg, #fff, #0ff, #f0f, #fff);
   background-size: 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: parlat 3s linear infinite;
+}
+
+.altin {
+  background: linear-gradient(90deg, gold, orange, gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mavi {
+  color: cyan;
+}
+
+.kirmizi {
+  color: red;
 }
 
 @keyframes parlat {
@@ -33,9 +45,21 @@ body{
 
 <body>
 
-<h1>✨ Chat</h1>
+<h1>💬 Chat</h1>
 
 <input id="nick" placeholder="Nick yaz">
+
+<br><br>
+
+<select id="efekt">
+  <option value="parlak">✨ Işıltılı</option>
+  <option value="altin">🥇 Altın</option>
+  <option value="mavi">💙 Mavi</option>
+  <option value="kirmizi">❤️ Kırmızı</option>
+</select>
+
+<br><br>
+
 <button onclick="gir()">Giriş</button>
 
 <div id="chat" style="display:none;">
@@ -49,9 +73,11 @@ body{
 
 <script>
 let nick = "";
+let efekt = "";
 
 function gir(){
   nick = document.getElementById("nick").value;
+  efekt = document.getElementById("efekt").value;
 
   if(!nick){
     alert("Nick gir");
@@ -61,7 +87,7 @@ function gir(){
   document.getElementById("chat").style.display = "block";
 
   document.getElementById("nickgoster").innerHTML =
-    "<span class='parlak'>" + nick + "</span>";
+    "<span class='"+efekt+"'>" + nick + "</span>";
 }
 
 function gonder(){
@@ -70,7 +96,7 @@ function gonder(){
   if(!mesaj) return;
 
   document.getElementById("mesajlar").innerHTML +=
-    "<p><span class='parlak'>" + nick + ":</span> " + mesaj + "</p>";
+    "<p><span class='"+efekt+"'>" + nick + ":</span> " + mesaj + "</p>";
 }
 </script>
 
