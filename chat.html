@@ -99,19 +99,26 @@ span{position:relative;}
 </div>
 
 <div id="adminPanel" class="adminPanel">
-<input id="hedef" placeholder="Nick yaz">
+<input id="hedef" placeholder="Nick yaz"><br><br>
+
 <button onclick="adminYap()">👑 Admin Yap</button>
 <button onclick="modYap()">🛡 Mod Yap</button>
+<button onclick="rolKaldir()">❌ Rol Kaldır</button>
+
+<br><br>
+
 <button onclick="banla()">🚫 Sustur</button>
+<button onclick="unban()">✅ Sustur Kaldır</button>
+
+<br><br>
+
+<div id="liste"></div>
 </div>
 
 </div>
 
 <script>
-let user = {
-  nick:"",
-  rol:"user"
-};
+let user = { nick:"", rol:"user" };
 
 let users = JSON.parse(localStorage.getItem("users") || "{}");
 let bans = JSON.parse(localStorage.getItem("bans") || "[]");
@@ -119,6 +126,7 @@ let bans = JSON.parse(localStorage.getItem("bans") || "[]");
 function kaydet(){
   localStorage.setItem("users", JSON.stringify(users));
   localStorage.setItem("bans", JSON.stringify(bans));
+  listeGuncelle();
 }
 
 function gir(){
@@ -129,12 +137,10 @@ function gir(){
 
   user.nick = n;
 
-  // kayıtlı rol
   if(users[n]){
     user.rol = users[n];
   }
 
-  // admin şifre
   if(p === "1234"){
     user.rol = "admin";
     users[n] = "admin";
@@ -147,6 +153,8 @@ function gir(){
 
   document.getElementById("login").style.display="none";
   document.getElementById("chat").style.display="flex";
+
+  listeGuncelle();
 }
 
 function gonder(){
@@ -173,13 +181,13 @@ function gonder(){
 }
 
 function adminYap(){
-  let hedef = document.getElementById("hedef").value;
-  if(!hedef) return;
+  let h = document.getElementById("hedef").value;
+  if(!h) return;
 
-  users[hedef] = "admin";
+  users[h] = "admin";
   kaydet();
 
-  if(hedef === user.nick){
+  if(h === user.nick){
     user.rol = "admin";
     document.getElementById("adminPanel").style.display="block";
   }
@@ -188,31 +196,47 @@ function adminYap(){
 }
 
 function modYap(){
-  let hedef = document.getElementById("hedef").value;
-  if(!hedef) return;
+  let h = document.getElementById("hedef").value;
+  if(!h) return;
 
-  users[hedef] = "mod";
+  users[h] = "mod";
   kaydet();
 
-  if(hedef === user.nick){
+  if(h === user.nick){
     user.rol = "mod";
   }
 
   alert("Mod verildi");
 }
 
-function banla(){
-  let hedef = document.getElementById("hedef").value;
-  if(!hedef) return;
+function rolKaldir(){
+  let h = document.getElementById("hedef").value;
+  if(!h) return;
 
-  if(!bans.includes(hedef)){
-    bans.push(hedef);
+  delete users[h];
+  kaydet();
+
+  if(h === user.nick){
+    user.rol = "user";
+  }
+
+  alert("Rol kaldırıldı");
+}
+
+function banla(){
+  let h = document.getElementById("hedef").value;
+  if(!h) return;
+
+  if(!bans.includes(h)){
+    bans.push(h);
     kaydet();
   }
 
   alert("Susturuldu");
 }
-</script>
 
-</body>
-</html>
+function unban(){
+  let h = document.getElementById("hedef").value;
+  if(!h) return;
+
+  bans = bans.filter(u
