@@ -6,99 +6,85 @@
 
 <style>
 body{
+  margin:0;
   background:#000;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
-  margin:0;
   overflow:hidden;
 }
 
 /* LOGO */
 .logo{
   position:relative;
-  font-size:50px;
+  font-size:48px;
   font-weight:bold;
   font-family:Arial;
-  letter-spacing:5px;
   color:white;
 }
 
-/* SİMLİ */
+/* SİMLİ YAZI */
 .text{
   background:linear-gradient(270deg,#FFD700,#00FFFF,#FFD700);
-  background-size:400%;
+  background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:flow 5s linear infinite;
+  animation:flow 4s linear infinite;
 }
 
 @keyframes flow{
   0%{background-position:0%}
-  100%{background-position:400%}
+  100%{background-position:300%}
 }
 
 /* TOP */
 .ball{
   position:absolute;
-  left:-100px;
+  left:-60px;
   top:50%;
   transform:translateY(-50%);
-  font-size:30px;
+  font-size:28px;
   animation:shoot 2s linear infinite;
 }
 
 @keyframes shoot{
-  0%{
-    left:-100px;
-    transform:translateY(-50%) scale(0.8);
-  }
-  40%{
-    left:40%;
-    transform:translateY(-50%) scale(1.2);
-  }
-  70%{
-    left:55%;
-    transform:translateY(-50%) scale(1);
-  }
-  100%{
-    left:120%;
-    transform:translateY(-50%) scale(0.5);
-  }
+  0%{ left:-60px; opacity:1;}
+  50%{ left:50%; }
+  100%{ left:110%; opacity:0;}
 }
 
 /* PATLAMA */
-.impact{
+.hit{
   position:absolute;
   left:52%;
   top:50%;
   transform:translate(-50%,-50%);
-  font-size:30px;
+  font-size:26px;
   opacity:0;
-  animation:impact 2s linear infinite;
+  animation:hit 2s linear infinite;
 }
 
-@keyframes impact{
-  0%,50%,100%{opacity:0}
-  55%{opacity:1; transform:translate(-50%,-50%) scale(1.5)}
+@keyframes hit{
+  0%,45%,100%{opacity:0}
+  50%{opacity:1}
 }
 
 /* Ç PARLAMA */
-.c-glow{
+.cflash{
   position:absolute;
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
   font-size:50px;
-  color:#0ff;
+  color:#00ffff;
   opacity:0;
-  animation:cGlow 2s linear infinite;
+  animation:cflash 2s linear infinite;
 }
 
-@keyframes cGlow{
-  0%,60%,100%{opacity:0}
-  65%{opacity:1; text-shadow:0 0 20px #0ff;}
+@keyframes cflash{
+  0%,55%,100%{opacity:0}
+  60%{opacity:1; text-shadow:0 0 20px #0ff;}
 }
 </style>
 
@@ -109,14 +95,14 @@ body{
 <div class="logo">
   <span class="text">ÇATLI TV</span>
 
-  <!-- ⚽ TOP -->
+  <!-- ⚽ -->
   <div class="ball">⚽</div>
 
-  <!-- 💥 ÇARPMA -->
-  <div class="impact">💥</div>
+  <!-- 💥 -->
+  <div class="hit">💥</div>
 
-  <!-- 🔤 Ç PARLAMA -->
-  <div class="c-glow">Ç</div>
+  <!-- Ç FLASH -->
+  <div class="cflash">Ç</div>
 </div>
 
 </body>
