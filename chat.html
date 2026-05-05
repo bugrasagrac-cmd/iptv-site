@@ -16,6 +16,7 @@ body{
   color:white;
 }
 
+/* PANEL */
 .panel{
   width:400px;
   height:600px;
@@ -23,36 +24,30 @@ body{
   border-radius:10px;
   display:flex;
   flex-direction:column;
-  overflow:hidden;
 }
 
+/* HEADER */
 .header{
   background:#222;
   padding:10px;
   text-align:center;
 }
 
+/* CHAT */
 .mesajlar{
   flex:1;
   overflow-y:auto;
   padding:10px;
 }
 
+/* INPUT */
 .input{
   display:flex;
 }
+.input input{flex:1;padding:10px;border:none;}
+.input button{width:80px;}
 
-.input input{
-  flex:1;
-  padding:10px;
-  border:none;
-}
-
-.input button{
-  width:80px;
-}
-
-/* ✨ SIMLI */
+/* ✨ 1 SIMLI */
 .parlak{
   background:linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
   background-size:300%;
@@ -65,17 +60,46 @@ body{
   100%{background-position:300%}
 }
 
-/* 🔥 ALEV */
+/* 🔥 2 ALEV */
 .ates{
   color:orange;
   animation:ates 0.3s infinite alternate;
 }
 @keyframes ates{
   0%{text-shadow:0 0 5px red}
-  100%{text-shadow:0 0 15px yellow}
+  100%{text-shadow:0 0 20px yellow}
 }
 
-/* ❄️ KAR */
+/* 🌈 3 RAINBOW */
+.rainbow{
+  background:linear-gradient(90deg,red,orange,yellow,green,blue,purple);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:rain 4s linear infinite;
+}
+@keyframes rain{
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+
+/* 💎 4 NEON */
+.neon{
+  color:#0ff;
+  text-shadow:0 0 10px #0ff,0 0 30px #0ff;
+}
+
+/* ⚡ 5 ELEKTRIK */
+.elektrik{
+  color:yellow;
+  animation:blink 0.2s infinite;
+}
+@keyframes blink{
+  0%{opacity:1}
+  50%{opacity:0.3}
+  100%{opacity:1}
+}
+
+/* ❄️ 6 KAR */
 .kar::after{
   content:"❄ ❅ ❄";
   position:absolute;
@@ -88,28 +112,29 @@ body{
   100%{transform:translateY(20px)}
 }
 
-/* 🌈 RAINBOW */
-.rainbow{
-  background:linear-gradient(90deg,red,orange,yellow,green,blue,purple);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+/* 🌟 7 YILDIZ */
+.yildiz::after{
+  content:"✨ ✨ ✨";
+  position:absolute;
+  left:0;
+  width:100%;
+  animation:star 2s infinite;
+}
+@keyframes star{
+  0%{opacity:0}
+  50%{opacity:1}
+  100%{opacity:0}
 }
 
-/* 💎 NEON */
-.neon{
-  color:#0ff;
-  text-shadow:0 0 10px #0ff,0 0 20px #0ff;
-}
-
-/* ⚡ ELEKTRIK */
-.elektrik{
-  color:yellow;
-  animation:blink 0.2s infinite;
-}
-@keyframes blink{
-  0%{opacity:1}
-  50%{opacity:0.5}
-  100%{opacity:1}
+/* 💀 EXTRA efektler */
+.buyuk{font-size:28px;}
+.kucuk{font-size:14px;}
+.bold{font-weight:bold;}
+.italik{font-style:italic;}
+.don{animation:don 3s linear infinite;}
+@keyframes don{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
 }
 
 span{position:relative;}
@@ -125,17 +150,32 @@ span{position:relative;}
 <select id="efekt">
 <option value="parlak">✨ Simli</option>
 <option value="ates">🔥 Alev</option>
-<option value="parlak ates">🔥✨ Alev+Simli</option>
 <option value="rainbow">🌈 Rainbow</option>
-<option value="rainbow ates">🌈🔥 Rainbow+Alev</option>
 <option value="neon">💎 Neon</option>
-<option value="neon ates">💎🔥 Neon+Alev</option>
+<option value="elektrik">⚡ Elektrik</option>
+<option value="parlak ates">🔥✨ Alev+Simli</option>
+<option value="rainbow ates">🌈🔥 Rainbow+Alev</option>
+<option value="neon elektrik">💎⚡ Neon Elektrik</option>
 <option value="parlak kar">❄️ Simli Kar</option>
 <option value="rainbow kar">🌈❄️ Rainbow Kar</option>
-<option value="neon elektrik">💎⚡ Neon Elektrik</option>
+<option value="parlak yildiz">✨🌟 Simli Yıldız</option>
+<option value="rainbow yildiz">🌈🌟 Rainbow Yıldız</option>
+<option value="parlak don">🌀 Dönen Simli</option>
+<option value="neon don">💎🌀 Dönen Neon</option>
+<option value="rainbow don">🌈🌀 Dönen Rainbow</option>
+<option value="parlak bold">✨ Kalın Simli</option>
+<option value="rainbow italik">🌈 Eğik Rainbow</option>
+<option value="parlak buyuk">✨ Büyük Simli</option>
+<option value="ates buyuk">🔥 Büyük Alev</option>
+<option value="neon kucuk">💎 Küçük Neon</option>
+<option value="rainbow bold">🌈 Kalın Rainbow</option>
 <option value="parlak elektrik">✨⚡ Simli Elektrik</option>
 <option value="rainbow elektrik">🌈⚡ Rainbow Elektrik</option>
-<option value="parlak neon ates">🔥💎✨ FULL</option>
+<option value="neon kar">💎❄️ Neon Kar</option>
+<option value="ates yildiz">🔥✨ Alev Yıldız</option>
+<option value="parlak kar yildiz">❄️✨ FULL KAR</option>
+<option value="rainbow kar yildiz">🌈❄️ FULL RAINBOW KAR</option>
+<option value="parlak neon ates">🔥💎✨ FULL COMBO</option>
 </select>
 
 <br><br>
@@ -165,7 +205,7 @@ function gir(){
 
   if(!nick) return;
 
-  if(pass==="1234"){admin=true;} else {admin=false;}
+  admin = (pass==="1234");
 
   document.getElementById("chat").style.display="flex";
 }
