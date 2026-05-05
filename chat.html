@@ -43,65 +43,19 @@ body{
 .input input{flex:1;padding:10px;border:none;}
 .input button{width:80px;}
 
-span{position:relative;display:inline-block}
-
-/* ✨ simli */
-.simli{
-  background:linear-gradient(270deg,#FFD700,#fff,#FFD700);
-  background-size:300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:flow 3s linear infinite;
-}
-@keyframes flow{
-  0%{background-position:0%}
-  100%{background-position:300%}
+.nick{
+  display:inline-block;
+  animation:acil 0.5s ease-out;
 }
 
-/* ⚽ giriş animasyonu */
-.giris{
-  animation:giris 0.8s ease-out;
-}
-@keyframes giris{
-  0%{transform:translateY(-100px);opacity:0}
-  100%{transform:translateY(0);opacity:1}
+@keyframes acil{
+  0%{transform:scaleX(0);opacity:0}
+  100%{transform:scaleX(1);opacity:1}
 }
 
-/* 🚗 sağdan giriş */
-.araba{
-  animation:araba 0.8s ease-out;
-}
-@keyframes araba{
-  0%{transform:translateX(-200px);opacity:0}
-  100%{transform:translateX(0);opacity:1}
-}
-
-/* 💥 patlama */
-.patla::after{
-  content:"💥";
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  top:-15px;
-  animation:patla 0.8s;
-}
-@keyframes patla{
-  0%{opacity:1;transform:scale(0)}
-  100%{opacity:0;transform:scale(2)}
-}
-
-/* 🎉 yıldız */
-.yildiz::after{
-  content:"✨✨";
-  position:absolute;
-  left:0;
-  width:100%;
-  animation:yildiz 1s infinite;
-}
-@keyframes yildiz{
-  0%{opacity:0}
-  50%{opacity:1}
-  100%{opacity:0}
+.anim{
+  width:40px;
+  vertical-align:middle;
 }
 </style>
 </head>
@@ -112,25 +66,10 @@ span{position:relative;display:inline-block}
 <input id="nick" placeholder="Nick"><br><br>
 <input id="adminpass" placeholder="Admin şifre"><br><br>
 
-<!-- 🎭 KARAKTER -->
-<select id="char">
-<option value="⚽">⚽ Futbolcu</option>
-<option value="🔥">🔥 Ateş Adam</option>
-<option value="🚗">🚗 Araba</option>
-<option value="👑">👑 Kral</option>
-<option value="😈">😈 Şeytan</option>
-<option value="🤖">🤖 Robot</option>
-</select>
-
-<br><br>
-
-<!-- 🎬 ANİMASYON -->
 <select id="anim">
-<option value="giris">⚽ Yukarıdan Giriş</option>
-<option value="araba">🚗 Soldan Giriş</option>
-<option value="giris patla">💥 Giriş + Patlama</option>
-<option value="giris yildiz">✨ Parlama</option>
-<option value="araba patla">🚗💥 Araba Patlama</option>
+<option value="kid">👦 Çocuk Açıyor</option>
+<option value="car">🚗 Araba Geliyor</option>
+<option value="fire">🔥 Ateş Patlıyor</option>
 </select>
 
 <br><br>
@@ -149,11 +88,10 @@ span{position:relative;display:inline-block}
 </div>
 
 <script>
-let nick="", admin=false, char="", anim="";
+let nick="", admin=false, anim="";
 
 function gir(){
   nick=document.getElementById("nick").value;
-  char=document.getElementById("char").value;
   anim=document.getElementById("anim").value;
   let pass=document.getElementById("adminpass").value;
 
@@ -168,14 +106,30 @@ function gonder(){
   let mesaj=document.getElementById("mesaj").value;
   if(!mesaj) return;
 
-  let nickHTML = nick;
+  let gif="";
 
-  if(admin){
-    nickHTML = "<span class='"+anim+" simli'>"+char+" "+nick+"</span>";
+  if(anim==="kid"){
+    gif="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif";
+  }
+  if(anim==="car"){
+    gif="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif";
+  }
+  if(anim==="fire"){
+    gif="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif";
   }
 
-  document.getElementById("mesajlar").innerHTML +=
-    "<p>"+nickHTML+": "+mesaj+"</p>";
+  let html = "<p>";
+
+  if(admin){
+    html += "<img class='anim' src='"+gif+"'> ";
+    html += "<span class='nick'>👑 "+nick+"</span>";
+  } else {
+    html += nick;
+  }
+
+  html += ": " + mesaj + "</p>";
+
+  document.getElementById("mesajlar").innerHTML += html;
 }
 </script>
 
