@@ -2,32 +2,71 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ÇATLI TV</title>
+<title>ÇATLI TV Yayın</title>
 
 <style>
 body{
   margin:0;
-  background:#000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
+  background:black;
   overflow:hidden;
+  font-family:Arial;
+}
+
+/* SAHA */
+.field{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(#0a5d00,#0f7a00);
+}
+
+/* ÇİZGİ */
+.center-line{
+  position:absolute;
+  width:2px;
+  height:100%;
+  background:white;
+  left:50%;
+}
+
+/* TOP */
+.ball{
+  position:absolute;
+  top:50%;
+  left:10%;
+  font-size:30px;
+  animation:moveBall 10s linear infinite;
+}
+
+@keyframes moveBall{
+  0%{left:10%; top:50%}
+  25%{left:50%; top:40%}
+  50%{left:80%; top:60%}
+  75%{left:40%; top:55%}
+  100%{left:10%; top:50%}
+}
+
+/* SKOR */
+.score{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#000a;
+  padding:10px 20px;
+  border-radius:10px;
+  color:white;
+  font-size:18px;
 }
 
 /* LOGO */
 .logo{
-  position:relative;
-  font-size:48px;
+  position:absolute;
+  top:10px;
+  right:10px;
+  font-size:20px;
   font-weight:bold;
-  font-family:Arial;
-  color:white;
-}
-
-/* SİMLİ YAZI */
-.text{
   background:linear-gradient(270deg,#FFD700,#00FFFF,#FFD700);
-  background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   animation:flow 4s linear infinite;
@@ -38,72 +77,68 @@ body{
   100%{background-position:300%}
 }
 
-/* TOP */
-.ball{
+/* SÜRE */
+.timer{
   position:absolute;
-  left:-60px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:28px;
-  animation:shoot 2s linear infinite;
-}
-
-@keyframes shoot{
-  0%{ left:-60px; opacity:1;}
-  50%{ left:50%; }
-  100%{ left:110%; opacity:0;}
-}
-
-/* PATLAMA */
-.hit{
-  position:absolute;
-  left:52%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  font-size:26px;
-  opacity:0;
-  animation:hit 2s linear infinite;
-}
-
-@keyframes hit{
-  0%,45%,100%{opacity:0}
-  50%{opacity:1}
-}
-
-/* Ç PARLAMA */
-.cflash{
-  position:absolute;
+  top:40px;
   left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  font-size:50px;
-  color:#00ffff;
-  opacity:0;
-  animation:cflash 2s linear infinite;
+  transform:translateX(-50%);
+  color:white;
+  font-size:14px;
 }
 
-@keyframes cflash{
-  0%,55%,100%{opacity:0}
-  60%{opacity:1; text-shadow:0 0 20px #0ff;}
+/* SEYİRCİ SESİ (TEXT EFFECT) */
+.crowd{
+  position:absolute;
+  bottom:20px;
+  width:100%;
+  text-align:center;
+  color:white;
+  opacity:0.3;
+  animation:crowd 3s infinite;
+}
+
+@keyframes crowd{
+  0%{opacity:0.2}
+  50%{opacity:0.5}
+  100%{opacity:0.2}
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="logo">
-  <span class="text">ÇATLI TV</span>
+<div class="field"></div>
+<div class="center-line"></div>
 
-  <!-- ⚽ -->
-  <div class="ball">⚽</div>
+<div class="score">ÇATLI FC 1 - 0 RAKİP</div>
+<div class="timer" id="timer">00:00</div>
 
-  <!-- 💥 -->
-  <div class="hit">💥</div>
+<div class="logo">ÇATLI TV</div>
 
-  <!-- Ç FLASH -->
-  <div class="cflash">Ç</div>
-</div>
+<div class="ball">⚽</div>
+
+<div class="crowd">📣 Tribün sesi...</div>
+
+<script>
+let saniye = 0;
+
+let interval = setInterval(()=>{
+  saniye++;
+
+  let dakika = Math.floor(saniye / 60);
+  let sn = saniye % 60;
+
+  document.getElementById("timer").innerText =
+    String(dakika).padStart(2,"0")+":"+
+    String(sn).padStart(2,"0");
+
+  if(saniye >= 40){
+    clearInterval(interval);
+  }
+
+},1000);
+</script>
 
 </body>
 </html>
