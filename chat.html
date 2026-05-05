@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Ultra Chat</title>
+<title>Ultra Simli Chat</title>
 
 <style>
 body{
@@ -45,109 +45,26 @@ body{
 
 span{position:relative;}
 
-/* ✨ SIMLI AKIŞ */
-.simli{
-  background:linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
+/* ✨ SİMLİ AKAN */
+.simliNick{
   background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:simli 3s linear infinite;
+  animation:simliFlow 3s linear infinite;
 }
-@keyframes simli{
+
+@keyframes simliFlow{
   0%{background-position:0%}
   100%{background-position:300%}
 }
 
-/* 🔥 GERÇEK ALEV */
+/* 🔥 ALEV */
 .ates{
-  color:orange;
   animation:ates 0.2s infinite alternate;
 }
 @keyframes ates{
-  0%{text-shadow:0 0 5px red,0 0 10px orange;}
-  100%{text-shadow:0 0 15px yellow,0 0 25px red;}
-}
-
-/* 🌈 AKAN RAINBOW */
-.rainbow{
-  background:linear-gradient(270deg,red,orange,yellow,green,blue,purple);
-  background-size:600%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:rainbow 4s linear infinite;
-}
-@keyframes rainbow{
-  0%{background-position:0%}
-  100%{background-position:600%}
-}
-
-/* 💎 NEON NABIZ */
-.neon{
-  color:#0ff;
-  animation:neon 1s infinite alternate;
-}
-@keyframes neon{
-  0%{text-shadow:0 0 5px #0ff;}
-  100%{text-shadow:0 0 20px #0ff,0 0 40px #0ff;}
-}
-
-/* ⚡ ELEKTRİK TITREME */
-.elektrik{
-  color:yellow;
-  animation:elektrik 0.1s infinite;
-}
-@keyframes elektrik{
-  0%{opacity:1}
-  50%{opacity:0.3}
-  100%{opacity:1}
-}
-
-/* ❄️ GERÇEK KAR DÜŞME */
-.kar::after{
-  content:"❄ ❅ ❄ ❅ ❄";
-  position:absolute;
-  left:0;
-  width:100%;
-  animation:kar 2s linear infinite;
-}
-@keyframes kar{
-  0%{transform:translateY(-15px)}
-  100%{transform:translateY(25px)}
-}
-
-/* ✨ YILDIZ PARLAMA */
-.yildiz::after{
-  content:"✨ ✨ ✨";
-  position:absolute;
-  left:0;
-  width:100%;
-  animation:yildiz 1.5s infinite;
-}
-@keyframes yildiz{
-  0%{opacity:0}
-  50%{opacity:1}
-  100%{opacity:0}
-}
-
-/* 🌀 DÖNEN */
-.don{
-  display:inline-block;
-  animation:don 3s linear infinite;
-}
-@keyframes don{
-  0%{transform:rotate(0deg)}
-  100%{transform:rotate(360deg)}
-}
-
-/* 💀 ZIGZAG (farklı his) */
-.zigzag{
-  display:inline-block;
-  animation:zigzag 0.3s infinite;
-}
-@keyframes zigzag{
-  0%{transform:translateX(0)}
-  50%{transform:translateX(2px)}
-  100%{transform:translateX(-2px)}
+  0%{text-shadow:0 0 5px red;}
+  100%{text-shadow:0 0 20px yellow;}
 }
 </style>
 </head>
@@ -157,35 +74,11 @@ span{position:relative;}
 <div>
 <input id="nick" placeholder="Nick"><br><br>
 <input id="adminpass" placeholder="Admin şifre"><br><br>
-
-<select id="efekt">
-<option value="simli">✨ Simli</option>
-<option value="ates">🔥 Alev</option>
-<option value="rainbow">🌈 Rainbow</option>
-<option value="neon">💎 Neon</option>
-<option value="elektrik">⚡ Elektrik</option>
-<option value="kar">❄️ Kar</option>
-<option value="yildiz">✨ Yıldız</option>
-<option value="don">🌀 Dönen</option>
-<option value="zigzag">⚡ Titreyen</option>
-
-<!-- GERÇEK FARKLI KOMBO -->
-<option value="simli kar">✨❄️ Simli Kar</option>
-<option value="rainbow yildiz">🌈✨ Rainbow Yıldız</option>
-<option value="neon ates">💎🔥 Neon Alev</option>
-<option value="ates kar">🔥❄️ Alev Kar</option>
-<option value="rainbow don">🌈🌀 Dönen Rainbow</option>
-<option value="simli elektrik">✨⚡ Simli Elektrik</option>
-<option value="neon zigzag">💎⚡ Neon Titreme</option>
-<option value="rainbow kar yildiz">🌈❄️✨ FULL</option>
-</select>
-
-<br><br>
 <button onclick="gir()">Giriş</button>
 </div>
 
 <div class="panel" id="chat" style="display:none;">
-  <div class="header">💬 Chat</div>
+  <div class="header">💬 Simli Chat</div>
 
   <div id="mesajlar" class="mesajlar"></div>
 
@@ -197,12 +90,33 @@ span{position:relative;}
 
 <script>
 let nick="";
-let efekt="";
 let admin=false;
+
+// 💎 SENİN SİMLİ LİSTEN (kısaltılmış ama yeterli)
+const simliList = [
+"linear-gradient(270deg,#FFD700,#FFF8DC,#FFD700)",
+"linear-gradient(270deg,#FF0000,#FF8C00,#FFFF00)",
+"linear-gradient(270deg,#00FFFF,#0077FF,#00FFFF)",
+"linear-gradient(270deg,#FF69B4,#FFC0CB,#FF69B4)",
+"linear-gradient(270deg,#8A2BE2,#DA70D6,#8A2BE2)",
+"linear-gradient(270deg,#00FF00,#003300,#00FF00)",
+"linear-gradient(270deg,#FFFFFF,#00F0FF,#FFFFFF)",
+"linear-gradient(270deg,#FFA500,#FF4500,#FFA500)",
+"linear-gradient(270deg,#00FFFF,#FFFFFF,#00FFFF)",
+"linear-gradient(270deg,#FF1493,#FFB6C1,#FF1493)",
+"linear-gradient(270deg,#7FFF00,#00FF7F,#7FFF00)",
+"linear-gradient(270deg,#1E90FF,#00BFFF,#1E90FF)",
+"linear-gradient(270deg,#FFDAB9,#FFE4B5,#FFDAB9)",
+"linear-gradient(270deg,#ADFF2F,#7CFC00,#ADFF2F)",
+"linear-gradient(270deg,#00CED1,#20B2AA,#00CED1)",
+"linear-gradient(270deg,#FF4500,#FF6347,#FF4500)",
+"linear-gradient(270deg,#DA70D6,#EE82EE,#DA70D6)",
+"linear-gradient(270deg,#4169E1,#6495ED,#4169E1)",
+"linear-gradient(270deg,#32CD32,#228B22,#32CD32)"
+];
 
 function gir(){
   nick=document.getElementById("nick").value;
-  efekt=document.getElementById("efekt").value;
   let pass=document.getElementById("adminpass").value;
 
   if(!nick) return;
@@ -216,13 +130,16 @@ function gonder(){
   let mesaj=document.getElementById("mesaj").value;
   if(!mesaj) return;
 
+  let nickHTML = nick;
+
   if(admin){
-    document.getElementById("mesajlar").innerHTML +=
-      "<p><span class='"+efekt+"'>👑 "+nick+":</span> "+mesaj+"</p>";
-  } else {
-    document.getElementById("mesajlar").innerHTML +=
-      "<p>"+nick+": "+mesaj+"</p>";
+    let randomGradient = simliList[Math.floor(Math.random()*simliList.length)];
+
+    nickHTML = "<span class='simliNick ates' style='background:"+randomGradient+"'>👑 "+nick+"</span>";
   }
+
+  document.getElementById("mesajlar").innerHTML +=
+    "<p>"+nickHTML+": "+mesaj+"</p>";
 }
 </script>
 
