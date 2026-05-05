@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ÇATLI LIVE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+body{
+  background:#0b0b0b;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+
+.match{
+  background:#1a1a1a;
+  margin:15px auto;
+  padding:15px;
+  width:320px;
+  border-radius:12px;
+}
+
+.score{
+  font-size:26px;
+  color:#FFD700;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⚽ ÇATLI LIVE</h1>
+<div id="matches">Yükleniyor...</div>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://ycjhdiypymwlbycaznz.supabase.co",
+  "BURAYA_YENI_KEY"
+);
+
+async function load(){
+  let { data, error } = await supabaseClient
+    .from("matches")
+    .select("*");
+
+  if(error){
+    document.getElementById("matches").innerText = "Veri çekilemedi!";
+    console.log(error);
+    return;
+  }
+
+  let html = "";
+
+  if(data.length === 0){
+    html = "Henüz maç yok";
+  }
+
+  data.forEach(m => {
+    html += `
+    <div class="match">
+      <b>${m.home} vs ${m.away}</b>
+      <div class="score">${m.score}</div>
+      <div>${m.goals}</div>
+    </div>`;
+  });
+
+  document.getElementById("matches").innerHTML = html;
+}
+
+load();
+setInterval(load, 5000);
+</script>
+
+</body>
+</html>
