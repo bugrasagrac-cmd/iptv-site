@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Chat</title>
+<title>Ultra Chat</title>
 
 <style>
 body{
@@ -12,32 +12,50 @@ body{
   font-family:Arial;
 }
 
-/* ✨ efektler */
+/* 🔥 efektler */
 .parlak {
-  background: linear-gradient(90deg, #fff, #0ff, #f0f, #fff);
-  background-size: 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: parlat 3s linear infinite;
-}
-
-.altin {
-  background: linear-gradient(90deg, gold, orange, gold);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.mavi {
-  color: cyan;
-}
-
-.kirmizi {
-  color: red;
+  background: linear-gradient(90deg,#fff,#0ff,#f0f,#fff);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:parlat 3s linear infinite;
 }
 
 @keyframes parlat {
-  0% { background-position: 0% }
-  100% { background-position: 300% }
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+
+.ates { color: orange; text-shadow:0 0 10px red,0 0 20px orange;}
+.neon { color:#0ff; text-shadow:0 0 10px #0ff,0 0 20px #0ff;}
+.altin {
+  background:linear-gradient(gold,orange,gold);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.gumus { color:silver; }
+.kirmizi { color:red; }
+.mavi { color:cyan; }
+.yesil { color:lime; }
+.mor { color:violet; }
+.pembe { color:pink; }
+
+.rainbow {
+  background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.buz { color:#aef; text-shadow:0 0 10px #aef;}
+.elektrik { color:#ff0; text-shadow:0 0 10px yellow;}
+.golge { text-shadow:2px 2px 5px black;}
+.parlak2 { text-shadow:0 0 15px white;}
+.karanlik { color:#555;}
+.beyaz { color:white;}
+.gradyan {
+  background:linear-gradient(purple,cyan);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 </style>
 
@@ -45,17 +63,31 @@ body{
 
 <body>
 
-<h1>💬 Chat</h1>
+<h1>💬 Ultra Chat</h1>
 
 <input id="nick" placeholder="Nick yaz">
 
 <br><br>
 
 <select id="efekt">
-  <option value="parlak">✨ Işıltılı</option>
-  <option value="altin">🥇 Altın</option>
-  <option value="mavi">💙 Mavi</option>
-  <option value="kirmizi">❤️ Kırmızı</option>
+<option value="parlak">✨ Simli</option>
+<option value="ates">🔥 Alev</option>
+<option value="neon">💎 Neon</option>
+<option value="altin">🥇 Altın</option>
+<option value="gumus">🥈 Gümüş</option>
+<option value="kirmizi">❤️ Kırmızı</option>
+<option value="mavi">💙 Mavi</option>
+<option value="yesil">💚 Yeşil</option>
+<option value="mor">💜 Mor</option>
+<option value="pembe">💖 Pembe</option>
+<option value="rainbow">🌈 Rainbow</option>
+<option value="buz">🧊 Buz</option>
+<option value="elektrik">⚡ Elektrik</option>
+<option value="golge">🌑 Gölge</option>
+<option value="parlak2">🌟 Glow</option>
+<option value="karanlik">🌚 Dark</option>
+<option value="beyaz">⚪ Beyaz</option>
+<option value="gradyan">🎨 Gradient</option>
 </select>
 
 <br><br>
@@ -72,31 +104,28 @@ body{
 </div>
 
 <script>
-let nick = "";
-let efekt = "";
+let nick="";
+let efekt="";
 
 function gir(){
-  nick = document.getElementById("nick").value;
-  efekt = document.getElementById("efekt").value;
+  nick=document.getElementById("nick").value;
+  efekt=document.getElementById("efekt").value;
 
-  if(!nick){
-    alert("Nick gir");
-    return;
-  }
+  if(!nick){ alert("Nick gir"); return; }
 
-  document.getElementById("chat").style.display = "block";
+  document.getElementById("chat").style.display="block";
 
-  document.getElementById("nickgoster").innerHTML =
-    "<span class='"+efekt+"'>" + nick + "</span>";
+  document.getElementById("nickgoster").innerHTML=
+    "<span class='"+efekt+"'>"+nick+"</span>";
 }
 
 function gonder(){
-  let mesaj = document.getElementById("mesaj").value;
+  let mesaj=document.getElementById("mesaj").value;
 
   if(!mesaj) return;
 
-  document.getElementById("mesajlar").innerHTML +=
-    "<p><span class='"+efekt+"'>" + nick + ":</span> " + mesaj + "</p>";
+  document.getElementById("mesajlar").innerHTML+=
+    "<p><span class='"+efekt+"'>"+nick+":</span> "+mesaj+"</p>";
 }
 </script>
 
