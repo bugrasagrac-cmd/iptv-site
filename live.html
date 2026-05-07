@@ -1,76 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>ÇATLI LIVE</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futbol Prompt Oluşturucu</title>
 
 <style>
 body{
-  background:#0b0b0b;
-  color:white;
-  font-family:Arial;
-  text-align:center;
+    background:#0f0f0f;
+    font-family:Arial,sans-serif;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+    padding:20px;
 }
 
-.match{
-  background:#1a1a1a;
-  margin:15px auto;
-  padding:15px;
-  width:320px;
-  border-radius:12px;
+.container{
+    width:100%;
+    max-width:700px;
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:25px;
+    box-shadow:0 0 30px rgba(255,200,0,0.2);
 }
 
-.score{
-  font-size:26px;
-  color:#FFD700;
+h1{
+    text-align:center;
+    color:#ffd000;
+    margin-bottom:25px;
+}
+
+input, textarea{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:15px;
+    background:#2a2a2a;
+    color:white;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:18px;
+    background:#ffd000;
+    color:black;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+textarea{
+    height:320px;
+    color:#00ff66;
 }
 </style>
 </head>
 
 <body>
 
-<h1>⚽ ÇATLI LIVE</h1>
-<div id="matches">Yükleniyor...</div>
+<div class="container">
+
+<h1>⚽ FUTBOL PROMPT OLUŞTURUCU 🔥</h1>
+
+<input type="text" id="front" placeholder="Öndeki kişi">
+<input type="text" id="back" placeholder="Arkadaki kişi">
+<input type="text" id="topText" placeholder="Üst yazı">
+<input type="text" id="middleText" placeholder="Orta ana yazı">
+<input type="text" id="bottomText" placeholder="Alt yazı">
+
+<button onclick="generatePrompt()">
+PROMPT OLUŞTUR 🚀
+</button>
+
+<textarea id="output" readonly placeholder="Prompt burada oluşacak..."></textarea>
+
+</div>
 
 <script>
-const supabaseClient = supabase.createClient(
-  "https://ycjhdiypymwlbycaznz.supabase.co",
-  "BURAYA_YENI_KEY"
-);
 
-async function load(){
-  let { data, error } = await supabaseClient
-    .from("matches")
-    .select("*");
+function generatePrompt(){
 
-  if(error){
-    document.getElementById("matches").innerText = "Veri çekilemedi!";
-    console.log(error);
-    return;
-  }
+const front =
+document.getElementById("front").value;
 
-  let html = "";
+const back =
+document.getElementById("back").value;
 
-  if(data.length === 0){
-    html = "Henüz maç yok";
-  }
+const topText =
+document.getElementById("topText").value;
 
-  data.forEach(m => {
-    html += `
-    <div class="match">
-      <b>${m.home} vs ${m.away}</b>
-      <div class="score">${m.score}</div>
-      <div>${m.goals}</div>
-    </div>`;
-  });
+const middleText =
+document.getElementById("middleText").value;
 
-  document.getElementById("matches").innerHTML = html;
+const bottomText =
+document.getElementById("bottomText").value;
+
+const prompt = `
+Ultra gerçekçi futbol shorts thumbnaili, viral YouTube spor haber tarzı, dikey 9:16 format, ${front} önde büyük ve detaylı şekilde, güçlü yüz ifadesiyle kameraya bakıyor, ${back} arkada hafif bulanık ama görünür şekilde duruyor, dramatik stadyum atmosferi, sinematik ışıklandırma, kırmızı ve mavi meşaleler, yoğun ateş ve duman efektleri, görüntü boyunca uçuşan turuncu kıvılcımlar, karanlık futbol atmosferi, modern spor haber kapağı tasarımı, ultra detaylı yüz dokuları, gerçekçi forma detayları, yüksek kontrast, dinamik kamera açısı, oyuncular yazıları kapatmıyor, ORTADA YAZI İÇİN TEMİZ BOŞLUK BIRAKILMIŞ, yazılar TAM ORTADA ve çok okunaklı, büyük sarı beyaz kalın fontlar, siyah gölge çerçeveli yazılar, premium futbol edit estetiği, hiper gerçekçi, ultra detaylı, 8K.
+
+ÜST YAZI:
+"${topText}"
+
+ORTA ANA YAZI:
+"${middleText}"
+
+ALT YAZI:
+"${bottomText}"
+`;
+
+document.getElementById("output").value = prompt;
+
 }
 
-load();
-setInterval(load, 5000);
 </script>
 
 </body>
