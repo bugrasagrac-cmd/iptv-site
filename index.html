@@ -2,35 +2,48 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>HLS Çalışan Test</title>
+  <title>HLS Test Player</title>
 </head>
 <body>
 
-<h3>🎥 HLS Test</h3>
+<h3>🎥 HLS Test Oynatıcı</h3>
 
 <video id="video" controls style="width:600px; background:black;"></video>
+<br>
 
-<br><br>
-
-<button onclick="play()">Test Videoyu Oynat</button>
+<input id="url" style="width:400px;" placeholder="m3u8 link gir">
+<button onclick="play()">Oynat</button>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <script>
 function play() {
+  const url = document.getElementById("url").value;
   const video = document.getElementById("video");
-  const url = "https://storage.googleapis.com/shaka-demo-assets/angel-one-hls/hls.m3u8";
+
+  if (!url) return alert("Link gir");
+
+  // eski stream temizle
+  if (window.hls) {
+    window.hls.destroy();
+  }
 
   if (Hls.isSupported()) {
     const hls = new Hls();
+    window.hls = hls;
+
     hls.loadSource(url);
     hls.attachMedia(video);
+
     hls.on(Hls.Events.MANIFEST_PARSED, function () {
       video.play();
     });
-  } else {
+
+  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = url;
     video.play();
+  } else {
+    alert("Tarayıcı HLS desteklemiyor");
   }
 }
 </script>
