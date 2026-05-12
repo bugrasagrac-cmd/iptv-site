@@ -2,11 +2,11 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Super Prompt Builder</title>
+<title>Smart Prompt Generator</title>
 <style>
 body {
   font-family: Arial;
-  background: #111;
+  background: #0f0f0f;
   color: white;
   text-align: center;
 }
@@ -14,28 +14,26 @@ body {
 .container {
   width: 700px;
   margin: auto;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
-textarea, select {
+input {
   width: 100%;
   padding: 10px;
-  margin-top: 10px;
 }
 
 button {
   padding: 10px 20px;
-  margin-top: 15px;
+  margin-top: 10px;
   cursor: pointer;
-  background: #00c2ff;
+  background: #00e5ff;
   border: none;
-  color: black;
   font-weight: bold;
 }
 
 pre {
-  background: #000;
-  color: #0f0;
+  background: black;
+  color: lime;
   padding: 15px;
   margin-top: 20px;
   text-align: left;
@@ -46,86 +44,83 @@ pre {
 
 <body>
 
-<h2>🧠 Ultra Prompt Builder</h2>
+<h2>🧠 Smart Prompt Generator (Random Pro)</h2>
 
 <div class="container">
 
-  <textarea id="idea" placeholder="Ne yapmak istiyorsun? (örnek: e-ticaret sitesi, logo, uygulama)"></textarea>
+<input id="idea" placeholder="Örn: kahve sitesi, oyun app, logo tasarım">
 
-  <select id="type">
-    <option value="web">Web Site</option>
-    <option value="app">Mobil App</option>
-    <option value="ai">AI Prompt</option>
-    <option value="design">Tasarım</option>
-  </select>
+<br>
+<button onclick="generate()">🎯 Prompt Üret</button>
 
-  <button onclick="generate()">🚀 Mükemmel Prompt Oluştur</button>
-
-  <pre id="output"></pre>
+<pre id="output"></pre>
 
 </div>
 
 <script>
+function random(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 function generate() {
   const idea = document.getElementById("idea").value;
-  const type = document.getElementById("type").value;
+  if (!idea) return alert("Bir fikir yaz");
 
-  let prompt = "";
+  const roles = [
+    "sen kıdemli bir yazılım mimarısın",
+    "sen üst düzey bir UI/UX uzmanısın",
+    "sen Google seviyesinde bir ürün tasarımcısısın",
+    "sen profesyonel full-stack geliştiricisin"
+  ];
 
-  if (!idea) {
-    alert("Bir fikir yaz");
-    return;
-  }
+  const styles = [
+    "modern ve minimal tasarım kullan",
+    "premium ve high-end UI oluştur",
+    "Apple tasarım dili kullan",
+    "startup seviyesinde hızlı ve temiz UI yap"
+  ];
 
-  if (type === "web") {
-    prompt = `
-Sen profesyonel bir web geliştiricisisin.
+  const rules = [
+    "mobil uyumlu olsun",
+    "SEO uyumlu yapı kur",
+    "component bazlı düşün",
+    "performans odaklı geliştir",
+    "gerçek kullanıcı deneyimine odaklan"
+  ];
 
-Görev: ${idea} için modern, responsive ve kullanıcı dostu bir web sitesi tasarla.
+  const extras = [
+    "animasyonlar ekle",
+    "dark mode desteği ekle",
+    "interaktif UI oluştur",
+    "gerçek dünya kullanılabilirliği yüksek olsun",
+    "micro-interactions ekle"
+  ];
 
-Gereksinimler:
-- HTML, CSS, JavaScript kullan
-- Mobil uyumlu olsun
-- Modern UI (dark/light uyumlu)
-- UX odaklı tasarım
-- SEO uyumlu yapı
-- Gerçek dünya kullanılabilirliği yüksek olsun
+  const prompt =
+`${random(roles)}.
 
-Ekstra:
-- Animasyonlar ekle
-- Profesyonel layout kullan
-- Component bazlı düşün
-`;
-  }
+Görev: "${idea}" için profesyonel bir proje üret.
 
-  else if (type === "app") {
-    prompt = `
-Sen kıdemli bir mobile app developer'sın.
-
-Görev: ${idea} için bir mobil uygulama tasarla.
-
-Gereksinimler:
-- UI modern olmalı
-- Kullanıcı deneyimi yüksek olmalı
-- React Native veya Flutter mantığına uygun düşün
-- Basit ama güçlü yapı
-- Gerçek kullanıcı problemi çözmeli
-`;
-  }
-
-  else if (type === "ai") {
-    prompt = `
-Sen ileri seviye bir AI prompt engineer'sın.
-
-Görev: ${idea} için en yüksek kalite sonucu verecek prompt üret.
+Zorunlu stil:
+- ${random(styles)}
 
 Kurallar:
-- Açık ve net talimatlar yaz
-- Modeli yönlendir (role-based prompting)
-- Örnek çıktı formatı ekle
-- Gereksiz kelime kullanma
-- Maksimum kalite hedefle
-`;
-  }
+- ${random(rules)}
+- ${random(rules)}
 
-  else if (type === "design") {
+Ekstra istekler:
+- ${random(extras)}
+- ${random(extras)}
+
+Çıktı formatı:
+- sadece çalışır HTML/CSS/JS üret
+- açıklama yazma
+- production kalitesinde olsun
+`;
+
+  document.getElementById("output").innerText = prompt;
+}
+</script>
+
+</body>
+</html>
