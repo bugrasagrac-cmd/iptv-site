@@ -2,111 +2,112 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>10'lu Sıralı Downloader</title>
+  <title>Mini Sosyal Medya (Eğitim)</title>
   <style>
     body {
       font-family: Arial;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      background: #f4f4f4;
-    }
-
-    h2 {
+      background: #f5f5f5;
       text-align: center;
     }
 
+    .container {
+      width: 700px;
+      margin: auto;
+      margin-top: 30px;
+    }
+
     input {
-      width: 100%;
+      width: 80%;
       padding: 10px;
-      margin: 5px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      margin-top: 15px;
     }
 
     button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border: none;
-      background: black;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-
-    button:hover {
-      background: #333;
-    }
-
-    .status {
-      margin-top: 15px;
       padding: 10px;
+      cursor: pointer;
+    }
+
+    .feed {
+      margin-top: 20px;
+    }
+
+    .post {
       background: white;
-      border-radius: 6px;
-      min-height: 40px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border-radius: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<h2>⚡ 10 Link Sıralı Downloader</h2>
+  <h2>📱 Mini Sosyal Medya Platformu (YouTube + Instagram)</h2>
 
-<div id="inputs"></div>
+  <div class="container">
 
-<button onclick="start()">İNDİRMEYİ BAŞLAT</button>
+    <input id="url" placeholder="YouTube veya Instagram linki yapıştır">
+    <button onclick="addPost()">Paylaş</button>
 
-<div class="status" id="status">Hazır</div>
+    <div class="feed" id="feed"></div>
 
-<script>
-  // 10 input oluştur
-  const container = document.getElementById("inputs");
+  </div>
 
-  for (let i = 0; i < 10; i++) {
-    const input = document.createElement("input");
-    input.placeholder = "Link " + (i + 1);
-    input.id = "u" + i;
-    container.appendChild(input);
-  }
+  <script>
+    function addPost() {
+      const url = document.getElementById("url").value;
+      const feed = document.getElementById("feed");
 
-  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+      if (!url) return alert("Link gir!");
 
-  async function download(url, i) {
-    const res = await fetch(url);
-    const blob = await res.blob();
+      let embedHTML = "";
 
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "file_" + (i + 1);
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
+      // 🎥 YouTube linki
+      if (url.includes("youtube.com") || url.includes("youtu.be")) {
+        let videoId = "";
 
-  async function start() {
-    const status = document.getElementById("status");
+        if (url.includes("youtu.be")) {
+          videoId = url.split("/").pop();
+        } else {
+          const urlParams = new URLSearchParams(url.split("?")[1]);
+          videoId = urlParams.get("v");
+        }
 
-    for (let i = 0; i < 10; i++) {
-      const url = document.getElementById("u" + i).value;
-
-      if (!url) continue;
-
-      status.innerText = "İndiriliyor: " + (i + 1);
-
-      try {
-        await download(url, i);
-      } catch (e) {
-        status.innerText = "Hata oluştu: " + (i + 1);
+        embedHTML = `
+          <iframe 
+            src="https://www.youtube.com/embed/${videoId}" 
+            allowfullscreen>
+          </iframe>
+        `;
       }
 
-      await sleep(700);
-    }
+      // 📸 Instagram linki
+      else if (url.includes("instagram.com")) {
+        embedHTML = `
+          <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14"></blockquote>
+          <script async src="//www.instagram.com/embed.js"><\/script>
+        `;
+      }
 
-    status.innerText = "Bitti ✅";
-  }
-</script>
+      else {
+        embedHTML = "<p>❌ Sadece YouTube veya Instagram linki desteklenir</p>";
+      }
+
+      const post = document.createElement("div");
+      post.className = "post";
+      post.innerHTML = embedHTML;
+
+      feed.prepend(post);
+
+      document.getElementById("url").value = "";
+    }
+  </script>
 
 </body>
 </html>
