@@ -2,97 +2,35 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>HLS Video Oynatıcı (Eğitim)</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f4f4;
-      text-align: center;
-    }
-
-    .container {
-      width: 700px;
-      margin: auto;
-      margin-top: 20px;
-    }
-
-    video {
-      width: 100%;
-      background: black;
-      border-radius: 10px;
-    }
-
-    input {
-      width: 80%;
-      padding: 10px;
-      margin-top: 15px;
-    }
-
-    button {
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .info {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #555;
-    }
-  </style>
+  <title>HLS Çalışan Test</title>
 </head>
-
 <body>
 
-<h2>🎥 Eğitim Amaçlı HLS Video Oynatıcı</h2>
+<h3>🎥 HLS Test</h3>
 
-<div class="container">
+<video id="video" controls style="width:600px; background:black;"></video>
 
-  <video id="video" controls></video>
+<br><br>
 
-  <br>
+<button onclick="play()">Test Videoyu Oynat</button>
 
-  <input id="url" placeholder=".m3u8 video linki gir (HLS)">
-  <button onclick="play()">Oynat</button>
-
-  <div class="info">
-    Sadece izinli / açık HLS (.m3u8) yayınlar çalışır.
-  </div>
-
-</div>
-
-<!-- HLS.js -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <script>
 function play() {
-  const url = document.getElementById("url").value;
   const video = document.getElementById("video");
+  const url = "https://storage.googleapis.com/shaka-demo-assets/angel-one-hls/hls.m3u8";
 
-  if (!url) {
-    alert("Link gir!");
-    return;
-  }
-
-  if (url.includes(".m3u8")) {
-
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        video.play();
-      });
-    } 
-    else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = url;
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
       video.play();
-    } 
-    else {
-      alert("Tarayıcı HLS desteklemiyor");
-    }
-
+    });
   } else {
-    alert("Sadece .m3u8 (HLS) link gir");
+    video.src = url;
+    video.play();
   }
 }
 </script>
