@@ -1,50 +1,46 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>HLS Test Player</title>
+  <title>AI Site Builder Demo</title>
 </head>
 <body>
 
-<h3>🎥 HLS Test Oynatıcı</h3>
+<h2>🤖 Site Üretici</h2>
 
-<video id="video" controls style="width:600px; background:black;"></video>
+<textarea id="prompt" rows="4" cols="50" placeholder="Ne sitesi istiyorsun?"></textarea>
 <br>
+<button onclick="generate()">Site Oluştur</button>
 
-<input id="url" style="width:400px;" placeholder="m3u8 link gir">
-<button onclick="play()">Oynat</button>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<pre id="output"></pre>
 
 <script>
-function play() {
-  const url = document.getElementById("url").value;
-  const video = document.getElementById("video");
+function generate() {
+  const input = document.getElementById("prompt").value.toLowerCase();
 
-  if (!url) return alert("Link gir");
+  let code = "";
 
-  // eski stream temizle
-  if (window.hls) {
-    window.hls.destroy();
+  if (input.includes("kahve")) {
+    code = `
+<html>
+  <h1>Kahve Dükkanı</h1>
+  <p>En iyi kahveler burada</p>
+</html>`;
   }
 
-  if (Hls.isSupported()) {
-    const hls = new Hls();
-    window.hls = hls;
-
-    hls.loadSource(url);
-    hls.attachMedia(video);
-
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      video.play();
-    });
-
-  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src = url;
-    video.play();
-  } else {
-    alert("Tarayıcı HLS desteklemiyor");
+  else if (input.includes("e-ticaret")) {
+    code = `
+<html>
+  <h1>Mağaza</h1>
+  <p>Ürün listesi burada</p>
+</html>`;
   }
+
+  else {
+    code = "Genel site şablonu oluşturuldu";
+  }
+
+  document.getElementById("output").innerText = code;
 }
 </script>
 
