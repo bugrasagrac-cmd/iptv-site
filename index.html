@@ -2,12 +2,12 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Mini Sosyal Medya (Eğitim)</title>
+  <title>Sosyal Medya Eğitim Platformu</title>
   <style>
     body {
       font-family: Arial;
-      background: #f5f5f5;
       text-align: center;
+      background: #f4f4f4;
     }
 
     .container {
@@ -27,14 +27,10 @@
       cursor: pointer;
     }
 
-    .feed {
-      margin-top: 20px;
-    }
-
     .post {
       background: white;
+      margin-top: 20px;
       padding: 15px;
-      margin-bottom: 20px;
       border-radius: 10px;
     }
 
@@ -43,71 +39,77 @@
       height: 400px;
       border-radius: 10px;
     }
+
+    .ig-box {
+      padding: 20px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
   </style>
 </head>
 
 <body>
 
-  <h2>📱 Mini Sosyal Medya Platformu (YouTube + Instagram)</h2>
+<h2>📱 Sosyal Medya Eğitim Platformu</h2>
 
-  <div class="container">
+<div class="container">
 
-    <input id="url" placeholder="YouTube veya Instagram linki yapıştır">
-    <button onclick="addPost()">Paylaş</button>
+  <input id="url" placeholder="YouTube veya Instagram linki">
+  <button onclick="addPost()">Paylaş</button>
 
-    <div class="feed" id="feed"></div>
+  <div id="feed"></div>
 
-  </div>
+</div>
 
-  <script>
-    function addPost() {
-      const url = document.getElementById("url").value;
-      const feed = document.getElementById("feed");
+<script>
+function addPost() {
+  const url = document.getElementById("url").value;
+  const feed = document.getElementById("feed");
 
-      if (!url) return alert("Link gir!");
+  if (!url) return alert("Link gir!");
 
-      let embedHTML = "";
+  let content = "";
 
-      // 🎥 YouTube linki
-      if (url.includes("youtube.com") || url.includes("youtu.be")) {
-        let videoId = "";
+  // 🎥 YouTube
+  if (url.includes("youtube.com") || url.includes("youtu.be")) {
+    let videoId = "";
 
-        if (url.includes("youtu.be")) {
-          videoId = url.split("/").pop();
-        } else {
-          const urlParams = new URLSearchParams(url.split("?")[1]);
-          videoId = urlParams.get("v");
-        }
-
-        embedHTML = `
-          <iframe 
-            src="https://www.youtube.com/embed/${videoId}" 
-            allowfullscreen>
-          </iframe>
-        `;
-      }
-
-      // 📸 Instagram linki
-      else if (url.includes("instagram.com")) {
-        embedHTML = `
-          <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14"></blockquote>
-          <script async src="//www.instagram.com/embed.js"><\/script>
-        `;
-      }
-
-      else {
-        embedHTML = "<p>❌ Sadece YouTube veya Instagram linki desteklenir</p>";
-      }
-
-      const post = document.createElement("div");
-      post.className = "post";
-      post.innerHTML = embedHTML;
-
-      feed.prepend(post);
-
-      document.getElementById("url").value = "";
+    if (url.includes("youtu.be")) {
+      videoId = url.split("/").pop();
+    } else {
+      const params = new URLSearchParams(url.split("?")[1]);
+      videoId = params.get("v");
     }
-  </script>
+
+    content = `
+      <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+    `;
+  }
+
+  // 📸 Instagram (çalışan yöntem)
+  else if (url.includes("instagram.com")) {
+    content = `
+      <div class="ig-box">
+        <p>📸 Instagram içerik</p>
+        <a href="${url}" target="_blank">Gönderiyi aç</a>
+      </div>
+    `;
+  }
+
+  else {
+    content = "<p>❌ Sadece YouTube veya Instagram linki</p>";
+  }
+
+  const post = document.createElement("div");
+  post.className = "post";
+  post.innerHTML = content;
+
+  feed.prepend(post);
+
+  document.getElementById("url").value = "";
+}
+</script>
 
 </body>
 </html>
