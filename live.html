@@ -2,12 +2,12 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Mini Knowledge Base</title>
+<title>AI Image Generator</title>
 
 <style>
 body {
   font-family: Arial;
-  background: #0f0f0f;
+  background: #111;
   color: white;
   text-align: center;
 }
@@ -18,76 +18,70 @@ body {
   margin-top: 50px;
 }
 
-input {
+input, select {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
+  margin-top: 10px;
 }
 
 button {
   padding: 12px 20px;
-  margin-top: 10px;
+  margin-top: 15px;
   background: #00e5ff;
   border: none;
   font-weight: bold;
   cursor: pointer;
 }
 
-.box {
-  margin-top: 20px;
+pre {
   background: black;
+  color: #00ff88;
   padding: 15px;
+  margin-top: 20px;
   text-align: left;
-  min-height: 100px;
+  white-space: pre-wrap;
 }
 </style>
 </head>
 
 <body>
 
-<h2>📚 Soru-Cevap Veri Tabanı</h2>
+<h2>🎨 AI Image Prompt Builder</h2>
 
 <div class="container">
 
-<input id="q" placeholder="Soru yaz (örn: Batuhan ne demek?)">
+<input id="idea" placeholder="Ne çizilsin? (örn: cyberpunk şehir)">
 
-<button onclick="ask()">Sor</button>
+<select id="style">
+  <option value="realistic">Realistic</option>
+  <option value="anime">Anime</option>
+  <option value="3d render">3D Render</option>
+  <option value="pixel art">Pixel Art</option>
+</select>
 
-<div class="box" id="ans">Cevap burada</div>
+<button onclick="generate()">🚀 Prompt Oluştur</button>
+
+<pre id="output">Hazır...</pre>
 
 </div>
 
 <script>
+function generate(){
 
-// 🧠 GERÇEK VERİ TABANI (JSON gibi)
-const db = [
-  {
-    key: "batuhan",
-    answer: "Batuhan ismi Türk kökenlidir ve 'batı hanı / güçlü lider' anlamına gelir."
-  },
-  {
-    key: "güneş",
-    answer: "Güneş bir yıldızdır ve Dünya'nın enerji kaynağıdır."
-  },
-  {
-    key: "dünya",
-    answer: "Dünya, Güneş sistemindeki yaşam barındıran gezegendir."
-  },
-  {
-    key: "yapay zeka",
-    answer: "Yapay zeka, insan düşünmesini taklit eden sistemlerdir."
+  const idea = document.getElementById("idea").value;
+  const style = document.getElementById("style").value;
+
+  if(!idea){
+    alert("Bir fikir yaz");
+    return;
   }
-];
 
-function ask(){
-  const q = document.getElementById("q").value.toLowerCase();
+  const prompt =
+`A highly detailed ${style} image of ${idea}.
+Ultra realistic, cinematic lighting, 4k, high detail, professional composition.
+No text, no watermark.`;
 
-  let found = db.find(item => q.includes(item.key));
-
-  if(found){
-    document.getElementById("ans").innerText = found.answer;
-  } else {
-    document.getElementById("ans").innerText = "Bu soru veri tabanında yok.";
-  }
+  document.getElementById("output").innerText = prompt;
 }
 </script>
 
