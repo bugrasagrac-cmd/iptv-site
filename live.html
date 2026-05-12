@@ -1,20 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+<meta charset="UTF-8">
+<title>Super Prompt Builder</title>
 <style>
-body { font-family: Arial; text-align:center; }
-header { background:brown; color:white; padding:20px; }
-button { padding:10px; background:brown; color:white; border:none; }
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  width: 700px;
+  margin: auto;
+  margin-top: 30px;
+}
+
+textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  cursor: pointer;
+  background: #00c2ff;
+  border: none;
+  color: black;
+  font-weight: bold;
+}
+
+pre {
+  background: #000;
+  color: #0f0;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: left;
+  white-space: pre-wrap;
+}
 </style>
 </head>
+
 <body>
 
-<header>
-<h1>Kahve Dükkanı</h1>
-</header>
+<h2>🧠 Ultra Prompt Builder</h2>
 
-<p>En iyi kahveler burada ☕</p>
-<button>Sipariş Ver</button>
+<div class="container">
 
-</body>
-</html>
+  <textarea id="idea" placeholder="Ne yapmak istiyorsun? (örnek: e-ticaret sitesi, logo, uygulama)"></textarea>
+
+  <select id="type">
+    <option value="web">Web Site</option>
+    <option value="app">Mobil App</option>
+    <option value="ai">AI Prompt</option>
+    <option value="design">Tasarım</option>
+  </select>
+
+  <button onclick="generate()">🚀 Mükemmel Prompt Oluştur</button>
+
+  <pre id="output"></pre>
+
+</div>
+
+<script>
+function generate() {
+  const idea = document.getElementById("idea").value;
+  const type = document.getElementById("type").value;
+
+  let prompt = "";
+
+  if (!idea) {
+    alert("Bir fikir yaz");
+    return;
+  }
+
+  if (type === "web") {
+    prompt = `
+Sen profesyonel bir web geliştiricisisin.
+
+Görev: ${idea} için modern, responsive ve kullanıcı dostu bir web sitesi tasarla.
+
+Gereksinimler:
+- HTML, CSS, JavaScript kullan
+- Mobil uyumlu olsun
+- Modern UI (dark/light uyumlu)
+- UX odaklı tasarım
+- SEO uyumlu yapı
+- Gerçek dünya kullanılabilirliği yüksek olsun
+
+Ekstra:
+- Animasyonlar ekle
+- Profesyonel layout kullan
+- Component bazlı düşün
+`;
+  }
+
+  else if (type === "app") {
+    prompt = `
+Sen kıdemli bir mobile app developer'sın.
+
+Görev: ${idea} için bir mobil uygulama tasarla.
+
+Gereksinimler:
+- UI modern olmalı
+- Kullanıcı deneyimi yüksek olmalı
+- React Native veya Flutter mantığına uygun düşün
+- Basit ama güçlü yapı
+- Gerçek kullanıcı problemi çözmeli
+`;
+  }
+
+  else if (type === "ai") {
+    prompt = `
+Sen ileri seviye bir AI prompt engineer'sın.
+
+Görev: ${idea} için en yüksek kalite sonucu verecek prompt üret.
+
+Kurallar:
+- Açık ve net talimatlar yaz
+- Modeli yönlendir (role-based prompting)
+- Örnek çıktı formatı ekle
+- Gereksiz kelime kullanma
+- Maksimum kalite hedefle
+`;
+  }
+
+  else if (type === "design") {
