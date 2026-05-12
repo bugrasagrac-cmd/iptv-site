@@ -1,131 +1,20 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Futbol Prompt Oluşturucu</title>
-
 <style>
-body{
-    background:#0f0f0f;
-    font-family:Arial,sans-serif;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    margin:0;
-    padding:20px;
-}
-
-.container{
-    width:100%;
-    max-width:700px;
-    background:#1b1b1b;
-    padding:25px;
-    border-radius:25px;
-    box-shadow:0 0 30px rgba(255,200,0,0.2);
-}
-
-h1{
-    text-align:center;
-    color:#ffd000;
-    margin-bottom:25px;
-}
-
-input, textarea{
-    width:100%;
-    padding:14px;
-    margin-bottom:15px;
-    border:none;
-    border-radius:15px;
-    background:#2a2a2a;
-    color:white;
-    font-size:16px;
-    box-sizing:border-box;
-}
-
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:18px;
-    background:#ffd000;
-    color:black;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-button:hover{
-    transform:scale(1.03);
-}
-
-textarea{
-    height:320px;
-    color:#00ff66;
-}
+body { font-family: Arial; text-align:center; }
+header { background:brown; color:white; padding:20px; }
+button { padding:10px; background:brown; color:white; border:none; }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<header>
+<h1>Kahve Dükkanı</h1>
+</header>
 
-<h1>⚽ FUTBOL PROMPT OLUŞTURUCU 🔥</h1>
-
-<input type="text" id="front" placeholder="Öndeki kişi">
-<input type="text" id="back" placeholder="Arkadaki kişi">
-<input type="text" id="topText" placeholder="Üst yazı">
-<input type="text" id="middleText" placeholder="Orta ana yazı">
-<input type="text" id="bottomText" placeholder="Alt yazı">
-
-<button onclick="generatePrompt()">
-PROMPT OLUŞTUR 🚀
-</button>
-
-<textarea id="output" readonly placeholder="Prompt burada oluşacak..."></textarea>
-
-</div>
-
-<script>
-
-function generatePrompt(){
-
-const front =
-document.getElementById("front").value;
-
-const back =
-document.getElementById("back").value;
-
-const topText =
-document.getElementById("topText").value;
-
-const middleText =
-document.getElementById("middleText").value;
-
-const bottomText =
-document.getElementById("bottomText").value;
-
-const prompt = `
-Ultra gerçekçi futbol shorts thumbnaili, viral YouTube spor haber tarzı, dikey 9:16 format, ${front} önde büyük ve detaylı şekilde, güçlü yüz ifadesiyle kameraya bakıyor, ${back} arkada hafif bulanık ama görünür şekilde duruyor, dramatik stadyum atmosferi, sinematik ışıklandırma, kırmızı ve mavi meşaleler, yoğun ateş ve duman efektleri, görüntü boyunca uçuşan turuncu kıvılcımlar, karanlık futbol atmosferi, modern spor haber kapağı tasarımı, ultra detaylı yüz dokuları, gerçekçi forma detayları, yüksek kontrast, dinamik kamera açısı, oyuncular yazıları kapatmıyor, ORTADA YAZI İÇİN TEMİZ BOŞLUK BIRAKILMIŞ, yazılar TAM ORTADA ve çok okunaklı, büyük sarı beyaz kalın fontlar, siyah gölge çerçeveli yazılar, premium futbol edit estetiği, hiper gerçekçi, ultra detaylı, 8K.
-
-ÜST YAZI:
-"${topText}"
-
-ORTA ANA YAZI:
-"${middleText}"
-
-ALT YAZI:
-"${bottomText}"
-`;
-
-document.getElementById("output").value = prompt;
-
-}
-
-</script>
+<p>En iyi kahveler burada ☕</p>
+<button>Sipariş Ver</button>
 
 </body>
 </html>
