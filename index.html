@@ -2,18 +2,24 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Sosyal Medya Eğitim Platformu</title>
+  <title>HLS Video Oynatıcı (Eğitim)</title>
   <style>
     body {
       font-family: Arial;
-      text-align: center;
       background: #f4f4f4;
+      text-align: center;
     }
 
     .container {
       width: 700px;
       margin: auto;
-      margin-top: 30px;
+      margin-top: 20px;
+    }
+
+    video {
+      width: 100%;
+      background: black;
+      border-radius: 10px;
     }
 
     input {
@@ -27,87 +33,67 @@
       cursor: pointer;
     }
 
-    .post {
-      background: white;
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 400px;
-      border-radius: 10px;
-    }
-
-    .ig-box {
-      padding: 20px;
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 10px;
+    .info {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
     }
   </style>
 </head>
 
 <body>
 
-<h2>📱 Sosyal Medya Eğitim Platformu</h2>
+<h2>🎥 Eğitim Amaçlı HLS Video Oynatıcı</h2>
 
 <div class="container">
 
-  <input id="url" placeholder="YouTube veya Instagram linki">
-  <button onclick="addPost()">Paylaş</button>
+  <video id="video" controls></video>
 
-  <div id="feed"></div>
+  <br>
+
+  <input id="url" placeholder=".m3u8 video linki gir (HLS)">
+  <button onclick="play()">Oynat</button>
+
+  <div class="info">
+    Sadece izinli / açık HLS (.m3u8) yayınlar çalışır.
+  </div>
 
 </div>
 
+<!-- HLS.js -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <script>
-function addPost() {
+function play() {
   const url = document.getElementById("url").value;
-  const feed = document.getElementById("feed");
+  const video = document.getElementById("video");
 
-  if (!url) return alert("Link gir!");
+  if (!url) {
+    alert("Link gir!");
+    return;
+  }
 
-  let content = "";
+  if (url.includes(".m3u8")) {
 
-  // 🎥 YouTube
-  if (url.includes("youtube.com") || url.includes("youtu.be")) {
-    let videoId = "";
-
-    if (url.includes("youtu.be")) {
-      videoId = url.split("/").pop();
-    } else {
-      const params = new URLSearchParams(url.split("?")[1]);
-      videoId = params.get("v");
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
+    } 
+    else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = url;
+      video.play();
+    } 
+    else {
+      alert("Tarayıcı HLS desteklemiyor");
     }
 
-    content = `
-      <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-    `;
+  } else {
+    alert("Sadece .m3u8 (HLS) link gir");
   }
-
-  // 📸 Instagram (çalışan yöntem)
-  else if (url.includes("instagram.com")) {
-    content = `
-      <div class="ig-box">
-        <p>📸 Instagram içerik</p>
-        <a href="${url}" target="_blank">Gönderiyi aç</a>
-      </div>
-    `;
-  }
-
-  else {
-    content = "<p>❌ Sadece YouTube veya Instagram linki</p>";
-  }
-
-  const post = document.createElement("div");
-  post.className = "post";
-  post.innerHTML = content;
-
-  feed.prepend(post);
-
-  document.getElementById("url").value = "";
 }
 </script>
 
