@@ -2,93 +2,36 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Video Yakala & İndir 🔥</title>
+<title>Benim Video Kasam</title>
 <style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #121212;
-  color: white;
-}
-.container {
-  margin-top: 80px;
-}
-input {
-  width: 80%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 10px;
-}
-button {
-  padding: 12px 20px;
-  border-radius: 10px;
-  border: none;
-  background: #1db954;
-  color: white;
-  font-size: 16px;
-  margin: 5px;
-}
-video {
-  margin-top: 20px;
-  max-width: 90%;
-  border-radius: 12px;
-}
+body { font-family: Arial; background:#111; color:white; text-align:center; }
+input { margin:20px; }
+video { width:90%; margin-top:20px; border-radius:10px; }
 </style>
 </head>
-
 <body>
-<div class="container">
-  <h2>Instagram Video Kurtarıcı 🚀</h2>
-  
-  <input type="text" id="url" placeholder="Video linkini yapıştır">
-  <br>
-  <button onclick="getVideo()">Videoyu Getir</button>
-  <button onclick="downloadVideo()">İndir</button>
 
-  <br>
-  <video id="video" controls></video>
-</div>
+<h2>📁 Video Arşivim</h2>
+
+<input type="file" accept="video/*" multiple onchange="loadVideos(event)">
+
+<div id="list"></div>
 
 <script>
-let videoSrc = "";
+function loadVideos(event){
+  const files = event.target.files;
+  const list = document.getElementById("list");
+  list.innerHTML = "";
 
-async function getVideo() {
-  const url = document.getElementById("url").value;
+  for(let file of files){
+    const url = URL.createObjectURL(file);
 
-  try {
-    const response = await fetch(url);
-    const text = await response.text();
+    const video = document.createElement("video");
+    video.src = url;
+    video.controls = true;
 
-    const match = text.match(/"video_url":"([^"]+)"/);
-
-    if (match && match[1]) {
-      videoSrc = match[1].replace(/\\u0026/g, "&").replace(/\\/g, "");
-      
-      const video = document.getElementById("video");
-      video.src = videoSrc;
-      video.load();
-    } else {
-      alert("Video bulunamadı 😢");
-    }
-
-  } catch (e) {
-    alert("Hata oluştu!");
+    list.appendChild(video);
   }
-}
-
-function downloadVideo() {
-  if (!videoSrc) {
-    alert("Önce videoyu getir!");
-    return;
-  }
-
-  const a = document.createElement("a");
-  a.href = videoSrc;
-  a.download = "video.mp4";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
 }
 </script>
 
