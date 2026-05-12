@@ -2,12 +2,12 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Prompt Engine Global</title>
+<title>Mini Knowledge Base</title>
 
 <style>
 body {
   font-family: Arial;
-  background: #0d0d0d;
+  background: #0f0f0f;
   color: white;
   text-align: center;
 }
@@ -15,128 +15,79 @@ body {
 .container {
   width: 700px;
   margin: auto;
-  margin-top: 40px;
+  margin-top: 50px;
 }
 
-input, select {
+input {
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
+  padding: 12px;
 }
 
 button {
   padding: 12px 20px;
-  margin-top: 15px;
+  margin-top: 10px;
   background: #00e5ff;
   border: none;
   font-weight: bold;
   cursor: pointer;
 }
 
-pre {
-  background: black;
-  color: #00ff88;
-  padding: 15px;
+.box {
   margin-top: 20px;
+  background: black;
+  padding: 15px;
   text-align: left;
-  white-space: pre-wrap;
-  height: 300px;
-  overflow: auto;
+  min-height: 100px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🌍 Prompt Engine Global (Single HTML)</h2>
+<h2>📚 Soru-Cevap Veri Tabanı</h2>
 
 <div class="container">
 
-<input id="idea" placeholder="Ne yapmak istiyorsun?">
+<input id="q" placeholder="Soru yaz (örn: Batuhan ne demek?)">
 
-<select id="type">
-  <option value="web">Web Site</option>
-  <option value="app">Mobil App</option>
-  <option value="logo">Logo</option>
-  <option value="ai">AI Task</option>
-</select>
+<button onclick="ask()">Sor</button>
 
-<button onclick="generate()">🚀 Prompt Üret</button>
-
-<pre id="output">Hazır...</pre>
+<div class="box" id="ans">Cevap burada</div>
 
 </div>
 
 <script>
 
-// 🔥 VARYASYON HAVUZU
-const roles = [
-"sen kıdemli yazılım mimarısın",
-"sen Google UX tasarımcısısın",
-"sen Apple design ekibindesin",
-"sen senior full-stack geliştiricisin"
-];
-
-const styles = [
-"modern ve minimal tasarım",
-"premium high-end UI",
-"Apple tarzı sade arayüz",
-"startup hızlı UI"
-];
-
-const rules = [
-"mobil-first tasarla",
-"SEO uyumlu yap",
-"component bazlı düşün",
-"performans odaklı geliştir"
-];
-
-const extras = [
-"micro animation ekle",
-"dark mode ekle",
-"yüksek UX akışı oluştur",
-"interaktif UI tasarla"
-];
-
-// 🎲 random fonksiyon
-function r(arr){
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function generate(){
-
-  const idea = document.getElementById("idea").value;
-  const type = document.getElementById("type").value;
-
-  if(!idea){
-    alert("Bir fikir yaz");
-    return;
+// 🧠 GERÇEK VERİ TABANI (JSON gibi)
+const db = [
+  {
+    key: "batuhan",
+    answer: "Batuhan ismi Türk kökenlidir ve 'batı hanı / güçlü lider' anlamına gelir."
+  },
+  {
+    key: "güneş",
+    answer: "Güneş bir yıldızdır ve Dünya'nın enerji kaynağıdır."
+  },
+  {
+    key: "dünya",
+    answer: "Dünya, Güneş sistemindeki yaşam barındıran gezegendir."
+  },
+  {
+    key: "yapay zeka",
+    answer: "Yapay zeka, insan düşünmesini taklit eden sistemlerdir."
   }
+];
 
-  const prompt =
-`${r(roles)}.
+function ask(){
+  const q = document.getElementById("q").value.toLowerCase();
 
-Görev: "${idea}" için ${type} alanında profesyonel bir ürün tasarla.
+  let found = db.find(item => q.includes(item.key));
 
-Tasarım:
-- ${r(styles)}
-- ${r(styles)}
-
-Kurallar:
-- ${r(rules)}
-- ${r(rules)}
-- ${r(rules)}
-
-Ekstra:
-- ${r(extras)}
-- ${r(extras)}
-
-Çıktı:
-- sadece AI prompt üret
-- kod yazma
-- profesyonel seviyede olsun`;
-
-  document.getElementById("output").innerText = prompt;
+  if(found){
+    document.getElementById("ans").innerText = found.answer;
+  } else {
+    document.getElementById("ans").innerText = "Bu soru veri tabanında yok.";
+  }
 }
 </script>
 
