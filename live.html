@@ -2,11 +2,12 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Smart Prompt Generator</title>
+<title>Prompt Engine Global</title>
+
 <style>
 body {
   font-family: Arial;
-  background: #0f0f0f;
+  background: #0d0d0d;
   color: white;
   text-align: center;
 }
@@ -17,106 +18,123 @@ body {
   margin-top: 40px;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 10px;
+  margin-top: 10px;
 }
 
 button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  cursor: pointer;
+  padding: 12px 20px;
+  margin-top: 15px;
   background: #00e5ff;
   border: none;
   font-weight: bold;
+  cursor: pointer;
 }
 
 pre {
   background: black;
-  color: lime;
+  color: #00ff88;
   padding: 15px;
   margin-top: 20px;
   text-align: left;
   white-space: pre-wrap;
+  height: 300px;
+  overflow: auto;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🧠 Smart Prompt Generator (Random Pro)</h2>
+<h2>🌍 Prompt Engine Global (Single HTML)</h2>
 
 <div class="container">
 
-<input id="idea" placeholder="Örn: kahve sitesi, oyun app, logo tasarım">
+<input id="idea" placeholder="Ne yapmak istiyorsun?">
 
-<br>
-<button onclick="generate()">🎯 Prompt Üret</button>
+<select id="type">
+  <option value="web">Web Site</option>
+  <option value="app">Mobil App</option>
+  <option value="logo">Logo</option>
+  <option value="ai">AI Task</option>
+</select>
 
-<pre id="output"></pre>
+<button onclick="generate()">🚀 Prompt Üret</button>
+
+<pre id="output">Hazır...</pre>
 
 </div>
 
 <script>
-function random(arr) {
+
+// 🔥 VARYASYON HAVUZU
+const roles = [
+"sen kıdemli yazılım mimarısın",
+"sen Google UX tasarımcısısın",
+"sen Apple design ekibindesin",
+"sen senior full-stack geliştiricisin"
+];
+
+const styles = [
+"modern ve minimal tasarım",
+"premium high-end UI",
+"Apple tarzı sade arayüz",
+"startup hızlı UI"
+];
+
+const rules = [
+"mobil-first tasarla",
+"SEO uyumlu yap",
+"component bazlı düşün",
+"performans odaklı geliştir"
+];
+
+const extras = [
+"micro animation ekle",
+"dark mode ekle",
+"yüksek UX akışı oluştur",
+"interaktif UI tasarla"
+];
+
+// 🎲 random fonksiyon
+function r(arr){
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function generate() {
+function generate(){
+
   const idea = document.getElementById("idea").value;
-  if (!idea) return alert("Bir fikir yaz");
+  const type = document.getElementById("type").value;
 
-  const roles = [
-    "sen kıdemli bir yazılım mimarısın",
-    "sen üst düzey bir UI/UX uzmanısın",
-    "sen Google seviyesinde bir ürün tasarımcısısın",
-    "sen profesyonel full-stack geliştiricisin"
-  ];
-
-  const styles = [
-    "modern ve minimal tasarım kullan",
-    "premium ve high-end UI oluştur",
-    "Apple tasarım dili kullan",
-    "startup seviyesinde hızlı ve temiz UI yap"
-  ];
-
-  const rules = [
-    "mobil uyumlu olsun",
-    "SEO uyumlu yapı kur",
-    "component bazlı düşün",
-    "performans odaklı geliştir",
-    "gerçek kullanıcı deneyimine odaklan"
-  ];
-
-  const extras = [
-    "animasyonlar ekle",
-    "dark mode desteği ekle",
-    "interaktif UI oluştur",
-    "gerçek dünya kullanılabilirliği yüksek olsun",
-    "micro-interactions ekle"
-  ];
+  if(!idea){
+    alert("Bir fikir yaz");
+    return;
+  }
 
   const prompt =
-`${random(roles)}.
+`${r(roles)}.
 
-Görev: "${idea}" için profesyonel bir proje üret.
+Görev: "${idea}" için ${type} alanında profesyonel bir ürün tasarla.
 
-Zorunlu stil:
-- ${random(styles)}
+Tasarım:
+- ${r(styles)}
+- ${r(styles)}
 
 Kurallar:
-- ${random(rules)}
-- ${random(rules)}
+- ${r(rules)}
+- ${r(rules)}
+- ${r(rules)}
 
-Ekstra istekler:
-- ${random(extras)}
-- ${random(extras)}
+Ekstra:
+- ${r(extras)}
+- ${r(extras)}
 
-Çıktı formatı:
-- sadece çalışır HTML/CSS/JS üret
-- açıklama yazma
-- production kalitesinde olsun
-`;
+Çıktı:
+- sadece AI prompt üret
+- kod yazma
+- profesyonel seviyede olsun`;
 
   document.getElementById("output").innerText = prompt;
 }
