@@ -1,54 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>IPTV</title>
+  <meta charset="UTF-8">
+  <title>10'lu Sıralı Downloader</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background: #f4f4f4;
+    }
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    h2 {
+      text-align: center;
+    }
 
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      background: black;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      background: white;
+      border-radius: 6px;
+      min-height: 40px;
+    }
+  </style>
 </head>
 
-<body style="background:black;color:white;text-align:center">
+<body>
 
-<h2>TEST ÇALIŞIYOR</h2>
-<h1>KANALLAR</h1>
+<h2>⚡ 10 Link Sıralı Downloader</h2>
 
-<div id="liste"></div>
+<div id="inputs"></div>
+
+<button onclick="start()">İNDİRMEYİ BAŞLAT</button>
+
+<div class="status" id="status">Hazır</div>
 
 <script>
-const supabase = window.supabase.createClient(
-  "https://ycjhdiyvpymwlbycaznz.supabase.co",
-  "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
-);
+  // 10 input oluştur
+  const container = document.getElementById("inputs");
 
-async function yukle(){
-  const { data, error } = await supabase
-    .from("channels")
-    .select("*");
-
-  console.log("DATA:", data);
-  console.log("ERROR:", error);
-
-  if(error){
-    document.getElementById("liste").innerHTML = "HATA: " + error.message;
-    return;
+  for (let i = 0; i < 10; i++) {
+    const input = document.createElement("input");
+    input.placeholder = "Link " + (i + 1);
+    input.id = "u" + i;
+    container.appendChild(input);
   }
 
-  if(!data || data.length === 0){
-    document.getElementById("liste").innerHTML = "Veri yok";
-    return;
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  async function download(url, i) {
+    const res = await fetch(url);
+    const blob = await res.blob();
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "file_" + (i + 1);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   }
 
-  let html = "";
+  async function start() {
+    const status = document.getElementById("status");
 
-  data.forEach(x=>{
-    html += "<p>"+x.name+"</p>";
-  });
+    for (let i = 0; i < 10; i++) {
+      const url = document.getElementById("u" + i).value;
 
-  document.getElementById("liste").innerHTML = html;
-}
+      if (!url) continue;
 
-yukle();
+      status.innerText = "İndiriliyor: " + (i + 1);
+
+      try {
+        await download(url, i);
+      } catch (e) {
+        status.innerText = "Hata oluştu: " + (i + 1);
+      }
+
+      await sleep(700);
+    }
+
+    status.innerText = "Bitti ✅";
+  }
 </script>
 
 </body>
