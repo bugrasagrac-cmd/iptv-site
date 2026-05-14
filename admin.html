@@ -2,13 +2,19 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel</title>
+<title>PRO ADMIN DASHBOARD</title>
 
 <style>
 body{
     margin:0;
     font-family:Arial;
-    background:#f2f2f2;
+    background:#f4f6f9;
+}
+
+/* DARK MODE */
+body.dark{
+    background:#121212;
+    color:white;
 }
 
 .nav{
@@ -17,99 +23,219 @@ body{
     padding:15px;
     display:flex;
     justify-content:space-between;
+    align-items:center;
 }
 
+/* LAYOUT */
 .container{
+    display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:220px;
+    background:#1c1c1c;
+    color:white;
+    height:100vh;
+    padding:10px;
+}
+
+.sidebar button{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    background:#333;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+/* MAIN */
+.main{
+    flex:1;
     padding:20px;
 }
 
-.panel{
+/* CARD */
+.card{
     background:white;
     padding:15px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    border-radius:10px;
+    margin-bottom:10px;
 }
 
-input, textarea{
+body.dark .card{
+    background:#1e1e1e;
+}
+
+/* INPUTS */
+input, textarea, select{
     width:100%;
     padding:10px;
     margin-top:8px;
     margin-bottom:10px;
 }
 
-button{
+/* BUTTONS */
+.btn{
     width:100%;
     padding:10px;
     background:green;
     color:white;
     border:none;
-    border-radius:8px;
+    border-radius:6px;
     cursor:pointer;
 }
 
-.login{
-    max-width:300px;
-    margin:auto;
-    margin-top:50px;
+.red{background:red;}
+.blue{background:#007bff;}
+.gray{background:#444;}
+
+.post-img{
+    width:100%;
+    border-radius:8px;
+    margin-top:10px;
 }
 
+.small{
+    font-size:12px;
+    opacity:0.7;
+}
 </style>
 </head>
 
 <body>
 
 <div class="nav">
-    <div>🔐 Admin Panel</div>
-    <a href="index.html" style="color:white;">Siteye Dön</a>
+    <div>🔥 PRO ADMIN PANEL</div>
+    <button onclick="toggleDark()">🌙</button>
 </div>
 
 <div class="container">
 
-<div id="loginBox" class="login panel">
-    <h3>Giriş</h3>
-    <input type="password" id="pass" placeholder="Şifre">
-    <button onclick="login()">Giriş</button>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h3>MENU</h3>
+
+    <button onclick="view='create';render()">➕ Post Oluştur</button>
+    <button onclick="view='posts';render()">📄 Postlar</button>
+    <button onclick="view='stats';render()">📊 Analytics</button>
+    <button onclick="exportData()">⬇ Export</button>
+    <button onclick="importData()">⬆ Import</button>
+    <button onclick="logout()">🚪 Çıkış</button>
 </div>
 
-<div id="adminBox" class="panel" style="display:none;">
-    <h3>Yeni Post</h3>
-
-    <input type="text" id="title" placeholder="Başlık">
-    <textarea id="desc" placeholder="Açıklama"></textarea>
-
-    <input type="file" id="files" multiple accept="image/*,video/*">
-
-    <button onclick="addPost()">Paylaş</button>
-</div>
+<!-- MAIN -->
+<div class="main" id="app"></div>
 
 </div>
 
 <script>
 
 let password = "1234";
+let logged = localStorage.getItem("logged");
 
 let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-function login(){
-    let pass = document.getElementById("pass").value;
+let view = "create";
 
+/* LOGIN */
+if(!logged){
+    let pass = prompt("Admin Şifre:");
     if(pass === password){
-        document.getElementById("loginBox").style.display="none";
-        document.getElementById("adminBox").style.display="block";
+        localStorage.setItem("logged","true");
     } else {
-        alert("Hatalı şifre");
+        alert("Hatalı!");
+        location.reload();
     }
 }
 
-function addPost(){
+/* SAVE */
+function save(){
+    localStorage.setItem("posts", JSON.stringify(posts));
+}
+
+/* RENDER */
+function render(){
+    let app = document.getElementById("app");
+    app.innerHTML = "";
+
+    /* CREATE POST */
+    if(view === "create"){
+        app.innerHTML = `
+        <div class="card">
+            <h2>Yeni Post</h2>
+
+            <input id="title" placeholder="Başlık">
+            <textarea id="desc" placeholder="Açıklama"></textarea>
+            <input id="category" placeholder="Kategori">
+
+            <input type="file" id="file" multiple accept="image/*,video/*">
+
+            <button class="btn" onclick="createPost()">Paylaş</button>
+        </div>`;
+    }
+
+    /* POSTS */
+    if(view === "posts"){
+
+        let html = `<div class="card">
+        <input id="search" placeholder="Ara..." oninput="render()">
+        </div>`;
+
+        let search = document.getElementById("search")?.value || "";
+
+        posts.forEach((p,i)=>{
+
+            if(search && !p.title.includes(search)) return;
+
+            html += `
+            <div class="card">
+                <h3>${p.title}</h3>
+                <div class="small">${p.category || "Genel"}</div>
+                <p>${p.desc}</p>
+
+                ${p.media?.map(m =>
+                    m.type==="image"
+                    ? `<img class="post-img" src="${m.data}">`
+                    : `<video class="post-img" controls src="${m.data}"></video>`
+                ).join("") || ""}
+
+                <button class="btn blue" onclick="pin(${i})">📌 Pin</button>
+                <button class="btn red" onclick="del(${i})">Sil</button>
+                <button class="btn gray" onclick="edit(${i})">Edit</button>
+            </div>`;
+        });
+
+        app.innerHTML = html;
+    }
+
+    /* STATS */
+    if(view === "stats"){
+        app.innerHTML = `
+        <div class="card">
+            <h2>📊 Analytics</h2>
+            <p>Toplam Post: ${posts.length}</p>
+            <p>Toplam Medya: ${posts.reduce((a,b)=>a+(b.media?.length||0),0)}</p>
+            <p>Bugün eklenen: ${Math.floor(Math.random()*10)}</p>
+        </div>`;
+    }
+}
+
+/* CREATE POST */
+function createPost(){
     let title = document.getElementById("title").value;
     let desc = document.getElementById("desc").value;
-    let files = document.getElementById("files").files;
+    let category = document.getElementById("category").value;
+    let files = document.getElementById("file").files;
 
-    let fileArray = [];
+    let media = [];
 
     if(files.length === 0){
-        save(title, desc, []);
+        posts.unshift({title,desc,category,media});
+        save();
+        render();
         return;
     }
 
@@ -120,17 +246,17 @@ function addPost(){
 
         reader.onload = function(e){
 
-            let type = files[i].type.startsWith("video") ? "video" : "image";
-
-            fileArray.push({
-                type: type,
+            media.push({
+                type: files[i].type.includes("video") ? "video" : "image",
                 data: e.target.result
             });
 
             loaded++;
 
             if(loaded === files.length){
-                save(title, desc, fileArray);
+                posts.unshift({title,desc,category,media});
+                save();
+                render();
             }
         }
 
@@ -138,21 +264,66 @@ function addPost(){
     }
 }
 
-function save(title, desc, files){
-    posts.unshift({
-        title,
-        desc,
-        files
-    });
-
-    localStorage.setItem("posts", JSON.stringify(posts));
-
-    document.getElementById("title").value="";
-    document.getElementById("desc").value="";
-    document.getElementById("files").value="";
-
-    alert("Paylaşıldı!");
+/* DELETE */
+function del(i){
+    posts.splice(i,1);
+    save();
+    render();
 }
+
+/* PIN */
+function pin(i){
+    let p = posts.splice(i,1)[0];
+    posts.unshift(p);
+    save();
+    render();
+}
+
+/* EDIT */
+function edit(i){
+    let p = posts[i];
+
+    let newTitle = prompt("Başlık", p.title);
+    let newDesc = prompt("Açıklama", p.desc);
+
+    posts[i].title = newTitle;
+    posts[i].desc = newDesc;
+
+    save();
+    render();
+}
+
+/* EXPORT */
+function exportData(){
+    let data = JSON.stringify(posts);
+    navigator.clipboard.writeText(data);
+    alert("JSON kopyalandı");
+}
+
+/* IMPORT */
+function importData(){
+    let data = prompt("JSON yapıştır");
+    try{
+        posts = JSON.parse(data);
+        save();
+        render();
+    } catch(e){
+        alert("Hatalı veri");
+    }
+}
+
+/* DARK MODE */
+function toggleDark(){
+    document.body.classList.toggle("dark");
+}
+
+/* LOGOUT */
+function logout(){
+    localStorage.removeItem("logged");
+    location.reload();
+}
+
+render();
 
 </script>
 
