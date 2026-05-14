@@ -5,67 +5,39 @@
 <title>Ana Sayfa</title>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial;
-    background:#eef0f3;
-}
-
-.nav{
-    background:#111;
-    color:white;
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-}
-
-.container{
-    padding:20px;
-}
-
-.post{
-    background:white;
-    margin-bottom:20px;
-    padding:15px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-
-.media img, .media video{
-    width:100%;
-    margin-top:10px;
-    border-radius:10px;
-}
+body{margin:0;font-family:Arial;background:#eef0f3;}
+.nav{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between;}
+.container{padding:20px;}
+.post{background:white;padding:15px;margin-bottom:15px;border-radius:10px;}
+img,video{width:100%;border-radius:10px;margin-top:10px;}
 </style>
 </head>
 
 <body>
 
 <div class="nav">
-    <div>🔥 Ana Sayfa</div>
-    <a href="admin.html" style="color:white;">Admin Giriş</a>
+<div>Ana Sayfa</div>
+<a href="admin.html" style="color:white;">Admin</a>
 </div>
 
 <div class="container" id="feed"></div>
 
 <script>
-let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+let posts = [];
 
 function render(){
     let feed = document.getElementById("feed");
     feed.innerHTML = "";
 
     posts.forEach(p=>{
-        let mediaHTML = "";
+        let media = "";
 
-        p.files.forEach(f=>{
-            if(f.type === "image"){
-                mediaHTML += `<img src="${f.data}">`;
-            } else if(f.type === "video"){
-                mediaHTML += `
-                <video controls>
-                    <source src="${f.data}">
-                </video>`;
+        (p.media || []).forEach(m=>{
+            if(m.type==="image"){
+                media += `<img src="${m.data}">`;
+            } else {
+                media += `<video controls src="${m.data}"></video>`;
             }
         });
 
@@ -73,13 +45,24 @@ function render(){
         <div class="post">
             <h3>${p.title}</h3>
             <p>${p.desc}</p>
-            <div class="media">${mediaHTML}</div>
-        </div>
-        `;
+            ${media}
+        </div>`;
     });
 }
 
-render();
+/* 🔥 REAL-TIME FIX */
+function sync(){
+    let newData = JSON.parse(localStorage.getItem("posts") || "[]");
+
+    if(JSON.stringify(newData) !== JSON.stringify(posts)){
+        posts = newData;
+        render();
+    }
+}
+
+setInterval(sync, 500); // yarım saniyede kontrol
+sync();
+
 </script>
 
 </body>
