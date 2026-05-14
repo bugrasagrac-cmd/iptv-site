@@ -6,17 +6,17 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#eef0f3;}
-.nav{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between;}
+.nav{background:#111;color:white;padding:15px;display:flex;justify-content:space-between;}
 .container{padding:20px;}
-.post{background:white;padding:15px;margin-bottom:15px;border-radius:10px;}
-img,video{width:100%;border-radius:10px;margin-top:10px;}
+.post{background:white;margin-bottom:15px;padding:15px;border-radius:10px;}
+img,video{width:100%;margin-top:10px;border-radius:10px;}
 </style>
 </head>
 
 <body>
 
 <div class="nav">
-<div>Ana Sayfa</div>
+<div>🔥 Site</div>
 <a href="admin.html" style="color:white;">Admin</a>
 </div>
 
@@ -33,12 +33,10 @@ function render(){
     posts.forEach(p=>{
         let media = "";
 
-        (p.media || []).forEach(m=>{
-            if(m.type==="image"){
-                media += `<img src="${m.data}">`;
-            } else {
-                media += `<video controls src="${m.data}"></video>`;
-            }
+        (p.media||[]).forEach(m=>{
+            media += m.type==="image"
+            ? `<img src="${m.data}">`
+            : `<video controls src="${m.data}"></video>`;
         });
 
         feed.innerHTML += `
@@ -50,17 +48,22 @@ function render(){
     });
 }
 
-/* 🔥 REAL-TIME FIX */
+/* 🔥 %100 REAL SYNC FIX */
 function sync(){
-    let newData = JSON.parse(localStorage.getItem("posts") || "[]");
+    const data = localStorage.getItem("posts");
 
-    if(JSON.stringify(newData) !== JSON.stringify(posts)){
-        posts = newData;
+    if(!data) return;
+
+    const newPosts = JSON.parse(data);
+
+    if(JSON.stringify(newPosts) !== JSON.stringify(posts)){
+        posts = newPosts;
         render();
     }
 }
 
-setInterval(sync, 500); // yarım saniyede kontrol
+/* sürekli dinle */
+setInterval(sync, 300);
 sync();
 
 </script>
