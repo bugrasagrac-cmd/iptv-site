@@ -2,62 +2,76 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel Site</title>
+<title>Gelişmiş Admin Panel</title>
+
 <style>
 body {
+    margin:0;
     font-family: Arial;
-    margin: 0;
-    background: #f2f2f2;
+    background:#f4f4f4;
 }
 
-/* Üst bar */
+/* NAV */
 .nav {
-    background: #222;
-    color: white;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
+    background:#111;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
 }
 
-.nav button {
-    background: #ff3b3b;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-/* Site alanı */
+/* SITE */
 #site {
-    padding: 40px;
-    font-size: 22px;
+    padding:30px;
 }
 
-/* Admin panel */
+.card {
+    background:white;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* ADMIN PANEL */
 #adminPanel {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 300px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    padding: 15px;
-    display: none;
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:320px;
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.3);
+    display:none;
 }
 
-textarea {
-    width: 100%;
-    height: 120px;
+input, textarea {
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    margin-bottom:10px;
 }
 
-button.save {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background: green;
-    color: white;
-    border: none;
-    cursor: pointer;
+button {
+    cursor:pointer;
+}
+
+.btn {
+    padding:10px;
+    width:100%;
+    border:none;
+    background:green;
+    color:white;
+    border-radius:6px;
+}
+
+.delete {
+    background:red;
+    color:white;
+    border:none;
+    padding:5px;
+    margin-top:5px;
 }
 </style>
 </head>
@@ -65,42 +79,88 @@ button.save {
 <body>
 
 <div class="nav">
-    <div>Benim Site</div>
-    <button onclick="toggleAdmin()">Admin Panel</button>
+    <div>🔥 Benim Site</div>
+    <button onclick="openAdmin()">Admin</button>
 </div>
 
-<div id="site">Buraya yazdığın şey gelecek...</div>
+<!-- SITE -->
+<div id="site"></div>
 
+<!-- ADMIN PANEL -->
 <div id="adminPanel">
-    <h3>Admin Panel</h3>
-    <textarea id="textInput" placeholder="Siteye yazı yaz..."></textarea>
-    <button class="save" onclick="kaydet()">Kaydet</button>
+
+    <div id="loginBox">
+        <h3>Admin Giriş</h3>
+        <input type="password" id="pass" placeholder="Şifre">
+        <button class="btn" onclick="login()">Giriş</button>
+    </div>
+
+    <div id="panelBox" style="display:none;">
+        <h3>Yeni Yazı</h3>
+        <textarea id="text" placeholder="Yazı gir..."></textarea>
+        <button class="btn" onclick="addPost()">Ekle</button>
+    </div>
+
 </div>
 
 <script>
-// sayfayı yükle
-window.onload = function() {
-    let saved = localStorage.getItem("siteText");
-    if(saved) {
-        document.getElementById("site").innerText = saved;
+
+let password = "1234"; // admin şifresi
+
+let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+// siteyi yükle
+function render() {
+    let site = document.getElementById("site");
+    site.innerHTML = "";
+
+    posts.forEach((p, i) => {
+        site.innerHTML += `
+        <div class="card">
+            <div>${p}</div>
+        </div>`;
+    });
+
+    localStorage.setItem("posts", JSON.stringify(posts));
+}
+render();
+
+// admin aç
+function openAdmin() {
+    document.getElementById("adminPanel").style.display = "block";
+}
+
+// login
+function login() {
+    let pass = document.getElementById("pass").value;
+
+    if(pass === password) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("panelBox").style.display = "block";
+    } else {
+        alert("Hatalı şifre!");
     }
-};
-
-// panel aç/kapat
-function toggleAdmin() {
-    let panel = document.getElementById("adminPanel");
-    panel.style.display = panel.style.display === "block" ? "none" : "block";
 }
 
-// kaydet
-function kaydet() {
-    let text = document.getElementById("textInput").value;
+// yazı ekle
+function addPost() {
+    let text = document.getElementById("text").value;
 
-    document.getElementById("site").innerText = text;
-    localStorage.setItem("siteText", text);
+    if(text.trim() === "") return;
 
-    alert("Site güncellendi!");
+    posts.push(text);
+    document.getElementById("text").value = "";
+
+    render();
 }
+
+// sil (extra gizli fonksiyon)
+document.addEventListener("click", function(e){
+    if(e.target.classList.contains("card")){
+        let index = Array.from(e.target.parentNode.children).indexOf(e.target);
+    }
+});
+
 </script>
 
 </body>
