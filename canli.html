@@ -2,39 +2,53 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Gelişmiş Admin Panel</title>
+<title>Mini CMS</title>
 
 <style>
-body {
+body{
     margin:0;
-    font-family: Arial;
-    background:#f4f4f4;
+    font-family:Arial;
+    background:#f2f2f2;
 }
 
-/* NAV */
-.nav {
+.nav{
     background:#111;
-    color:white;
+    color:#fff;
     padding:15px;
     display:flex;
     justify-content:space-between;
 }
 
-/* SITE */
-#site {
-    padding:30px;
+#site{
+    padding:20px;
 }
 
-.card {
+.card{
     background:white;
+    margin-bottom:15px;
     padding:15px;
-    margin-bottom:10px;
     border-radius:10px;
     box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* ADMIN PANEL */
-#adminPanel {
+.card img{
+    width:100%;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.delete{
+    background:red;
+    color:white;
+    border:none;
+    padding:5px 10px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+/* ADMIN */
+#adminPanel{
     position:fixed;
     right:20px;
     bottom:20px;
@@ -46,32 +60,24 @@ body {
     display:none;
 }
 
-input, textarea {
+input, textarea{
     width:100%;
-    padding:10px;
     margin-top:8px;
     margin-bottom:10px;
+    padding:10px;
 }
 
-button {
+button{
     cursor:pointer;
 }
 
-.btn {
-    padding:10px;
+.btn{
     width:100%;
-    border:none;
+    padding:10px;
     background:green;
     color:white;
-    border-radius:6px;
-}
-
-.delete {
-    background:red;
-    color:white;
     border:none;
-    padding:5px;
-    margin-top:5px;
+    border-radius:6px;
 }
 </style>
 </head>
@@ -79,14 +85,13 @@ button {
 <body>
 
 <div class="nav">
-    <div>🔥 Benim Site</div>
+    <div>🔥 Mini CMS</div>
     <button onclick="openAdmin()">Admin</button>
 </div>
 
-<!-- SITE -->
 <div id="site"></div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div id="adminPanel">
 
     <div id="loginBox">
@@ -96,29 +101,36 @@ button {
     </div>
 
     <div id="panelBox" style="display:none;">
-        <h3>Yeni Yazı</h3>
-        <textarea id="text" placeholder="Yazı gir..."></textarea>
-        <button class="btn" onclick="addPost()">Ekle</button>
+        <h3>Yeni Post</h3>
+
+        <textarea id="text" placeholder="Yazı..."></textarea>
+
+        <input type="file" id="img" accept="image/*">
+
+        <button class="btn" onclick="addPost()">Paylaş</button>
     </div>
 
 </div>
 
 <script>
 
-let password = "1234"; // admin şifresi
+let password = "1234";
 
 let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-// siteyi yükle
-function render() {
+// render
+function render(){
     let site = document.getElementById("site");
     site.innerHTML = "";
 
     posts.forEach((p, i) => {
         site.innerHTML += `
         <div class="card">
-            <div>${p}</div>
-        </div>`;
+            <div>${p.text}</div>
+            ${p.img ? `<img src="${p.img}">` : ""}
+            <button class="delete" onclick="del(${i})">Sil</button>
+        </div>
+        `;
     });
 
     localStorage.setItem("posts", JSON.stringify(posts));
@@ -126,40 +138,58 @@ function render() {
 render();
 
 // admin aç
-function openAdmin() {
-    document.getElementById("adminPanel").style.display = "block";
+function openAdmin(){
+    document.getElementById("adminPanel").style.display="block";
 }
 
 // login
-function login() {
+function login(){
     let pass = document.getElementById("pass").value;
 
-    if(pass === password) {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("panelBox").style.display = "block";
+    if(pass === password){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("panelBox").style.display="block";
     } else {
-        alert("Hatalı şifre!");
+        alert("Hatalı şifre");
     }
 }
 
-// yazı ekle
-function addPost() {
+// post ekle
+function addPost(){
     let text = document.getElementById("text").value;
+    let file = document.getElementById("img").files[0];
 
-    if(text.trim() === "") return;
+    if(text.trim()=="" && !file) return;
 
-    posts.push(text);
-    document.getElementById("text").value = "";
+    if(file){
+        let reader = new FileReader();
 
+        reader.onload = function(e){
+            posts.unshift({
+                text:text,
+                img:e.target.result
+            });
+            render();
+        }
+
+        reader.readAsDataURL(file);
+    } else {
+        posts.unshift({
+            text:text,
+            img:null
+        });
+        render();
+    }
+
+    document.getElementById("text").value="";
+    document.getElementById("img").value="";
+}
+
+// sil
+function del(i){
+    posts.splice(i,1);
     render();
 }
-
-// sil (extra gizli fonksiyon)
-document.addEventListener("click", function(e){
-    if(e.target.classList.contains("card")){
-        let index = Array.from(e.target.parentNode.children).indexOf(e.target);
-    }
-});
 
 </script>
 
