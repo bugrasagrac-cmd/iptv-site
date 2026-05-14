@@ -12,20 +12,18 @@ body{margin:0;font-family:Arial;background:#f2f2f2;}
 .box{background:white;padding:15px;border-radius:10px;}
 input,textarea{width:100%;padding:10px;margin:8px 0;}
 
-button{width:100%;padding:10px;border:none;color:white;cursor:pointer;}
-.green{background:green;}
-.red{background:red;}
-.blue{background:#007bff;}
+button{width:100%;padding:10px;background:green;color:white;border:none;cursor:pointer;}
 
 .post{background:white;margin-top:10px;padding:10px;border-radius:10px;}
-.small{font-size:12px;opacity:0.7;}
+.red{background:red;}
+.blue{background:#007bff;}
 </style>
 </head>
 
 <body>
 
 <div class="nav">
-<div>Admin Panel</div>
+<div>ADMIN</div>
 <a href="index.html" style="color:white;">Site</a>
 </div>
 
@@ -34,7 +32,7 @@ button{width:100%;padding:10px;border:none;color:white;cursor:pointer;}
 <div id="login" class="box">
 <h3>Giriş</h3>
 <input type="password" id="pass">
-<button class="green" onclick="login()">Giriş</button>
+<button onclick="login()">Giriş</button>
 </div>
 
 <div id="panel" style="display:none;">
@@ -47,7 +45,7 @@ button{width:100%;padding:10px;border:none;color:white;cursor:pointer;}
 
 <input type="file" id="files" multiple accept="image/*,video/*">
 
-<button class="green" onclick="addPost()">Paylaş</button>
+<button onclick="add()">Paylaş</button>
 </div>
 
 <div class="box">
@@ -72,7 +70,7 @@ function login(){
     } else alert("Hatalı şifre");
 }
 
-function addPost(){
+function add(){
 
     let title = document.getElementById("title").value;
     let desc = document.getElementById("desc").value;
@@ -110,9 +108,9 @@ function addPost(){
 
 function save(title,desc,media){
 
-    posts.unshift({title,desc,media,pin:false});
+    posts.unshift({title,desc,media});
 
-    localStorage.setItem("posts",JSON.stringify(posts));
+    localStorage.setItem("posts", JSON.stringify(posts));
 
     document.getElementById("title").value="";
     document.getElementById("desc").value="";
@@ -122,8 +120,9 @@ function save(title,desc,media){
     alert("Paylaşıldı!");
 }
 
-/* ADMIN LIST */
+/* admin liste */
 function renderList(){
+
     let list = document.getElementById("list");
     list.innerHTML = "";
 
@@ -132,7 +131,7 @@ function renderList(){
         list.innerHTML += `
         <div class="post">
             <b>${p.title}</b>
-            <div class="small">${p.desc}</div>
+            <p>${p.desc}</p>
 
             <button class="blue" onclick="pin(${i})">Pin</button>
             <button class="red" onclick="del(${i})">Sil</button>
@@ -140,14 +139,12 @@ function renderList(){
     });
 }
 
-/* DELETE */
 function del(i){
     posts.splice(i,1);
     localStorage.setItem("posts",JSON.stringify(posts));
     renderList();
 }
 
-/* PIN */
 function pin(i){
     let p = posts.splice(i,1)[0];
     posts.unshift(p);
