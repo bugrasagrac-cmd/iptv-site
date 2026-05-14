@@ -1,38 +1,274 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Benim Video Kasam</title>
-<style>
-body { font-family: Arial; background:#111; color:white; text-align:center; }
-input { margin:20px; }
-video { width:90%; margin-top:20px; border-radius:10px; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xat Tarzı Chat</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1a0033, #000);
+      height: 100vh;
+      overflow: hidden;
+      color: white;
+    }
+
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from {
+        opacity: 0.2;
+        transform: scale(1);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1.8);
+      }
+    }
+
+    .chat-container {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 950px;
+      height: 90vh;
+      margin: 20px auto;
+      background: rgba(0, 0, 0, 0.65);
+      border: 2px solid #ff00ff;
+      border-radius: 20px;
+      box-shadow: 0 0 30px #ff00ff;
+      display: flex;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .users {
+      width: 230px;
+      background: rgba(20, 0, 40, 0.9);
+      border-right: 2px solid #ff00ff;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .users h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .user {
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+      font-weight: bold;
+    }
+
+    .user::before {
+      content: "✨";
+      position: absolute;
+      right: 10px;
+      animation: spin 3s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .user:hover {
+      transform: scale(1.05);
+      background: rgba(255,0,255,0.2);
+      box-shadow: 0 0 15px #ff00ff;
+    }
+
+    .rainbow {
+      background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowMove 4s linear infinite;
+      background-size: 300%;
+    }
+
+    @keyframes rainbowMove {
+      0% { background-position: 0%; }
+      100% { background-position: 300%; }
+    }
+
+    .chat-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.08);
+      animation: fadeIn 0.4s ease;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .message strong {
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-area {
+      display: flex;
+      padding: 15px;
+      border-top: 2px solid #ff00ff;
+      background: rgba(0,0,0,0.8);
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      outline: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 16px;
+    }
+
+    .input-area button {
+      margin-left: 10px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px #ff00ff;
+    }
+
+    .input-area button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px #00ffff;
+    }
+
+    .title {
+      text-align: center;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      background: rgba(255,0,255,0.15);
+      border-bottom: 2px solid #ff00ff;
+      text-shadow: 0 0 20px #ff00ff;
+      letter-spacing: 2px;
+    }
+  </style>
 </head>
 <body>
 
-<h2>📁 Video Arşivim</h2>
+<div class="stars"></div>
 
-<input type="file" accept="video/*" multiple onchange="loadVideos(event)">
+<div class="chat-container">
+  <div class="users">
+    <h2>ONLINE</h2>
 
-<div id="list"></div>
+    <div class="user rainbow">★ KINGBATUHAN ★</div>
+    <div class="user" style="color:#00ff99;text-shadow:0 0 10px #00ff99;">✦ NightWolf ✦</div>
+    <div class="user" style="color:#ff4444;text-shadow:0 0 10px #ff4444;">🔥 DarkFire 🔥</div>
+    <div class="user" style="color:#00ffff;text-shadow:0 0 10px #00ffff;">⚡ IceStorm ⚡</div>
+    <div class="user" style="color:#ffcc00;text-shadow:0 0 10px #ffcc00;">👑 GoldMaster 👑</div>
+  </div>
+
+  <div class="chat-box">
+    <div class="title">XAT STYLE CHAT ROOM</div>
+
+    <div class="messages" id="messages">
+      <div class="message"><strong>KINGBATUHAN:</strong> Herkese selam 😎</div>
+      <div class="message"><strong>DarkFire:</strong> Oda çok iyi olmuş 🔥</div>
+      <div class="message"><strong>IceStorm:</strong> Animasyonlar aşırı güzel ⚡</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="messageInput" placeholder="Mesaj yaz..." />
+      <button onclick="sendMessage()">Gönder</button>
+    </div>
+  </div>
+</div>
 
 <script>
-function loadVideos(event){
-  const files = event.target.files;
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+  const starsContainer = document.querySelector('.stars');
 
-  for(let file of files){
-    const url = URL.createObjectURL(file);
-
-    const video = document.createElement("video");
-    video.src = url;
-    video.controls = true;
-
-    list.appendChild(video);
+  for (let i = 0; i < 150; i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDuration = (Math.random() * 3 + 1) + 's';
+    starsContainer.appendChild(star);
   }
-}
+
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const messages = document.getElementById('messages');
+
+    if (input.value.trim() !== '') {
+      const msg = document.createElement('div');
+      msg.classList.add('message');
+      msg.innerHTML = `<strong>KINGBATUHAN:</strong> ${input.value}`;
+      messages.appendChild(msg);
+
+      messages.scrollTop = messages.scrollHeight;
+      input.value = '';
+    }
+  }
+
+  document.getElementById('messageInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
 </script>
 
 </body>
