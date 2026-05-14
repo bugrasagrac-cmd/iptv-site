@@ -6,16 +6,19 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#f2f2f2;}
-.nav{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between;}
+.nav{background:#111;color:white;padding:15px;display:flex;justify-content:space-between;}
 .container{padding:20px;}
 
 .box{background:white;padding:15px;border-radius:10px;}
 input,textarea{width:100%;padding:10px;margin:8px 0;}
 
-button{width:100%;padding:10px;background:green;color:white;border:none;cursor:pointer;}
+button{width:100%;padding:10px;border:none;color:white;cursor:pointer;}
+.green{background:green;}
+.red{background:red;}
+.blue{background:#007bff;}
 
 .post{background:white;margin-top:10px;padding:10px;border-radius:10px;}
-.red{background:red;}
+.small{font-size:12px;opacity:0.7;}
 </style>
 </head>
 
@@ -31,19 +34,27 @@ button{width:100%;padding:10px;background:green;color:white;border:none;cursor:p
 <div id="login" class="box">
 <h3>Giriş</h3>
 <input type="password" id="pass">
-<button onclick="login()">Giriş</button>
+<button class="green" onclick="login()">Giriş</button>
 </div>
 
 <div id="panel" style="display:none;">
+
 <div class="box">
 <h3>Yeni Post</h3>
 
 <input id="title" placeholder="Başlık">
 <textarea id="desc" placeholder="Açıklama"></textarea>
+
 <input type="file" id="files" multiple accept="image/*,video/*">
 
-<button onclick="add()">Paylaş</button>
+<button class="green" onclick="addPost()">Paylaş</button>
 </div>
+
+<div class="box">
+<h3>Postlar</h3>
+<div id="list"></div>
+</div>
+
 </div>
 
 </div>
@@ -57,12 +68,11 @@ function login(){
     if(document.getElementById("pass").value === password){
         document.getElementById("login").style.display="none";
         document.getElementById("panel").style.display="block";
-    } else {
-        alert("Hatalı şifre");
-    }
+        renderList();
+    } else alert("Hatalı şifre");
 }
 
-function add(){
+function addPost(){
 
     let title = document.getElementById("title").value;
     let desc = document.getElementById("desc").value;
@@ -83,7 +93,7 @@ function add(){
         reader.onload = function(e){
 
             media.push({
-                type: files[i].type.includes("video") ? "video" : "image",
+                type: files[i].type.startsWith("video") ? "video" : "image",
                 data: e.target.result
             });
 
@@ -100,19 +110,49 @@ function add(){
 
 function save(title,desc,media){
 
-    posts.unshift({
-        title,
-        desc,
-        media
-    });
+    posts.unshift({title,desc,media,pin:false});
 
-    localStorage.setItem("posts", JSON.stringify(posts));
+    localStorage.setItem("posts",JSON.stringify(posts));
 
     document.getElementById("title").value="";
     document.getElementById("desc").value="";
     document.getElementById("files").value="";
 
+    renderList();
     alert("Paylaşıldı!");
+}
+
+/* ADMIN LIST */
+function renderList(){
+    let list = document.getElementById("list");
+    list.innerHTML = "";
+
+    posts.forEach((p,i)=>{
+
+        list.innerHTML += `
+        <div class="post">
+            <b>${p.title}</b>
+            <div class="small">${p.desc}</div>
+
+            <button class="blue" onclick="pin(${i})">Pin</button>
+            <button class="red" onclick="del(${i})">Sil</button>
+        </div>`;
+    });
+}
+
+/* DELETE */
+function del(i){
+    posts.splice(i,1);
+    localStorage.setItem("posts",JSON.stringify(posts));
+    renderList();
+}
+
+/* PIN */
+function pin(i){
+    let p = posts.splice(i,1)[0];
+    posts.unshift(p);
+    localStorage.setItem("posts",JSON.stringify(posts));
+    renderList();
 }
 
 </script>
