@@ -1,394 +1,220 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xat Tarzı Chat</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: radial-gradient(circle at top, #1a0033, #000);
-      height: 100vh;
-      overflow: hidden;
-      color: white;
-    }
-
-    .stars {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 2s infinite alternate;
-    }
-
-    @keyframes twinkle {
-      from {
-        opacity: 0.2;
-        transform: scale(1);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1.8);
-      }
-    }
-
-    .chat-container {
-      position: relative;
-      z-index: 2;
-      width: 90%;
-      max-width: 950px;
-      height: 90vh;
-      margin: 20px auto;
-      background: rgba(0, 0, 0, 0.65);
-      border: 2px solid #ff00ff;
-      border-radius: 20px;
-      box-shadow: 0 0 30px #ff00ff;
-      display: flex;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-    }
-
-    .users {
-      width: 230px;
-      background: rgba(20, 0, 40, 0.9);
-      border-right: 2px solid #ff00ff;
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    .users h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #00ffff;
-      text-shadow: 0 0 10px #00ffff;
-    }
-
-    .user {
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.05);
-      cursor: pointer;
-      transition: 0.3s;
-      position: relative;
-      overflow: hidden;
-      font-weight: bold;
-    }
-
-    .user::before {
-      content: "✨";
-      position: absolute;
-      right: 10px;
-      animation: spin 3s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .user:hover {
-      transform: scale(1.05);
-      background: rgba(255,0,255,0.2);
-      box-shadow: 0 0 15px #ff00ff;
-    }
-
-    .rainbow {
-      background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: rainbowMove 4s linear infinite;
-      background-size: 300%;
-    }
-
-    @keyframes rainbowMove {
-      0% { background-position: 0%; }
-      100% { background-position: 300%; }
-    }
-
-    .chat-box {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .message {
-      margin-bottom: 15px;
-      padding: 12px;
-      border-radius: 15px;
-      background: rgba(255,255,255,0.08);
-      animation: fadeIn 0.4s ease;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
-    }
-
-    .message strong {
-      color: #00ffff;
-      text-shadow: 0 0 10px #00ffff;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .input-area {
-      display: flex;
-      padding: 15px;
-      border-top: 2px solid #ff00ff;
-      background: rgba(0,0,0,0.8);
-    }
-
-    .input-area input {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      outline: none;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-size: 16px;
-    }
-
-    .input-area button {
-      margin-left: 10px;
-      padding: 14px 20px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(45deg, #ff00ff, #00ffff);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 0 15px #ff00ff;
-    }
-
-    .input-area button:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 25px #00ffff;
-    }
-
-    .title {
-      text-align: center;
-      padding: 15px;
-      font-size: 24px;
-      font-weight: bold;
-      background: rgba(255,0,255,0.15);
-      border-bottom: 2px solid #ff00ff;
-      text-shadow: 0 0 20px #ff00ff;
-      letter-spacing: 2px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Video İndirici</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #262626;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        p {
+            color: #8e8e8e;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            border-color: #bc1888;
+        }
+        button {
+            padding: 14px 24px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result-area {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #fafafa;
+            border: 1px solid #efefef;
+            display: none;
+        }
+        .error {
+            color: #ed4956;
+            background-color: #fff2f2;
+            border-color: #ffcccc;
+        }
+        .video-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .download-btn {
+            display: inline-block;
+            background-color: #0095f6;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background-color: #1877f2;
+        }
+        .loader {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #dc2743;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
 
-<div class="stars"></div>
+    <div class="container">
+        <h1>Instagram Video İndirici</h1>
+        <p>İndirmek istediğiniz Reels, Video veya Fotoğraf linkini yapıştırın</p>
+        
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="https://instagram.com... veya /reel/...">
+            <button id="btnSorgula" onclick="videoSorgula()">Sorgula</button>
+        </div>
 
-<div class="chat-container">
-  <div class="users">
-    <h2>ONLINE</h2>
-
-    <div class="user rainbow">★ KINGBATUHAN ★</div>
-    <div class="user" style="color:#00ff99;text-shadow:0 0 10px #00ff99;">✦ NightWolf ✦</div>
-    <div class="user" style="color:#ff4444;text-shadow:0 0 10px #ff4444;">🔥 DarkFire 🔥</div>
-    <div class="user" style="color:#00ffff;text-shadow:0 0 10px #00ffff;">⚡ IceStorm ⚡</div>
-    <div class="user" style="color:#ffcc00;text-shadow:0 0 10px #ffcc00;">👑 GoldMaster 👑</div>
-  </div>
-
-  <div class="chat-box">
-    <div class="title">XAT STYLE CHAT ROOM</div>
-
-    <div class="messages" id="messages">
-      <div class="message"><strong>KINGBATUHAN:</strong> Herkese selam 😎</div>
-      <div class="message"><strong>DarkFire:</strong> Oda çok iyi olmuş 🔥</div>
-      <div class="message"><strong>IceStorm:</strong> Animasyonlar aşırı güzel ⚡</div>
+        <div class="loader" id="loader"></div>
+        <div class="result-area" id="resultArea"></div>
     </div>
 
-    <div class="input-area">
-      <input type="text" id="messageInput" placeholder="Mesaj yaz..." />
-      <button onclick="sendMessage()">Gönder</button>
-    </div>
-  </div>
-</div>
+    <script>
+        async function videoSorgula() {
+            const urlInput = document.getElementById('urlInput').value.trim();
+            const resultArea = document.getElementById('resultArea');
+            const loader = document.getElementById('loader');
+            const btnSorgula = document.getElementById('btnSorgula');
 
-<script>
-  const starsContainer = document.querySelector('.stars');
+            // Sıfırlama işlemleri
+            resultArea.style.display = "none";
+            resultArea.className = "result-area";
+            resultArea.innerHTML = "";
 
-  for (let i = 0; i < 150; i++) {
-    const star = document.createElement('div');
-    star.classList.add('star');
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDuration = (Math.random() * 3 + 1) + 's';
-    starsContainer.appendChild(star);
-  }
+            if (!urlInput || !urlInput.includes('instagram.com')) {
+                hataGoster("Lütfen geçerli bir Instagram linki girin!");
+                return;
+            }
 
-  function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const messages = document.getElementById('messages');
+            // Yükleniyor durumunu göster
+            loader.style.display = "block";
+            btnSorgula.disabled = true;
 
-    if (input.value.trim() !== '') {
-      const msg = document.createElement('div');
-      msg.classList.add('message');
-      msg.innerHTML = `<strong>KINGBATUHAN:</strong> ${input.value}`;
-      messages.appendChild(msg);
+            try {
+                // Herkese açık ve proxy gerektirmeyen indirme API'si
+                const apiUrl = `https://api.cors.lol/?url=https://instagram.com${extractShortcode(urlInput)}/?__a=1&__d=1`;
+                
+                // Alternatif ve daha kararlı çalışan açık kaynak API servisi kullanımı
+                const response = await fetch(`https://workers.dev{encodeURIComponent(urlInput)}`);
+                const data = await response.json();
 
-      messages.scrollTop = messages.scrollHeight;
-      input.value = '';
-    }
-  }
+                if (data && data.success && data.data && data.data.length > 0) {
+                    const media = data.data[0];
+                    
+                    if (media.type === 'video') {
+                        resultArea.innerHTML = `
+                            <p style="color: #262626; font-weight: bold; margin-bottom: 10px;">Video Başarıyla Bulundu!</p>
+                            <video class="video-preview" controls>
+                                <source src="${media.url}" type="video/mp4">
+                                Tarayıcınız video oynatmayı desteklemiyor.
+                            </video>
+                            <br>
+                            <a href="${media.url}" target="_blank" download="instagram-video.mp4" class="download-btn">Videoyu İndir</a>
+                        `;
+                    } else {
+                        // Eğer link bir fotoğraf ise
+                        resultArea.innerHTML = `
+                            <p style="color: #262626; font-weight: bold; margin-bottom: 10px;">Fotoğraf Başarıyla Bulundu!</p>
+                            <img src="${media.url}" class="video-preview" alt="Instagram Görseli">
+                            <br>
+                            <a href="${media.url}" target="_blank" download="instagram-gorsel.jpg" class="download-btn">Fotoğrafı İndir</a>
+                        `;
+                    }
+                    resultArea.style.display = "block";
+                } else {
+                    hataGoster("Medya bulunamadı. Hesap gizli olabilir veya link hatalıdır.");
+                }
 
-  document.getElementById('messageInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      sendMessage();
-    }
-  });
-</script>
-
-
-
-<!-- ADMIN PANEL -->
-<div id="adminPanel" style="position:fixed;top:20px;right:20px;z-index:9999;background:rgba(0,0,0,0.9);border:2px solid #ff00ff;padding:15px;border-radius:15px;box-shadow:0 0 20px #ff00ff;width:260px;">
-  <h3 style="text-align:center;color:#00ffff;margin-bottom:10px;text-shadow:0 0 10px #00ffff;">👑 ADMIN PANEL</h3>
-
-  <select id="userSelect" style="width:100%;padding:10px;margin-bottom:10px;border-radius:10px;background:#111;color:white;border:none;">
-    <option>KINGBATUHAN</option>
-    <option>NightWolf</option>
-    <option>DarkFire</option>
-    <option>IceStorm</option>
-    <option>GoldMaster</option>
-  </select>
-
-  <button onclick="makeMod()" style="width:100%;margin-bottom:8px;padding:10px;border:none;border-radius:10px;background:#0066ff;color:white;font-weight:bold;cursor:pointer;">⭐ MOD YAP</button>
-
-  <button onclick="banUser()" style="width:100%;margin-bottom:8px;padding:10px;border:none;border-radius:10px;background:#ff0033;color:white;font-weight:bold;cursor:pointer;">🚫 BANLA</button>
-
-  <button onclick="kickUser()" style="width:100%;margin-bottom:8px;padding:10px;border:none;border-radius:10px;background:#ff8800;color:white;font-weight:bold;cursor:pointer;">⚠️ ODADAN AT</button>
-
-  <button onclick="clearChat()" style="width:100%;padding:10px;border:none;border-radius:10px;background:#00cc99;color:white;font-weight:bold;cursor:pointer;">🧹 CHAT TEMİZLE</button>
-</div>
-
-<script>
-let bannedUsers = [];
-let moderators = [];
-
-function updateUsers() {
-  const userElements = document.querySelectorAll('.user');
-
-  userElements.forEach(el => {
-    const originalName = el.getAttribute('data-name') || el.innerText.replace(/[⭐👑]/g,'').trim();
-    el.setAttribute('data-name', originalName);
-
-    if (bannedUsers.includes(originalName)) {
-      el.style.display = 'none';
-      return;
-    }
-
-    el.style.display = 'block';
-
-    if (moderators.includes(originalName)) {
-      el.innerHTML = '⭐ ' + originalName;
-      el.style.color = '#ffee00';
-      el.style.textShadow = '0 0 10px #ffee00';
-    } else if (originalName === 'KINGBATUHAN') {
-      el.innerHTML = '👑 ' + originalName;
-      el.style.color = '#ff2222';
-      el.style.textShadow = '0 0 12px #ff0000';
-    } else {
-      el.innerHTML = originalName;
-      el.style.color = 'white';
-      el.style.textShadow = '0 0 8px white';
-    }
-  });
-}
-
-function makeMod() {
-  const user = document.getElementById('userSelect').value;
-
-  if (user !== 'KINGBATUHAN' && !moderators.includes(user)) {
-    moderators.push(user);
-  }
-
-  updateUsers();
-
-  const msg = document.createElement('div');
-  msg.classList.add('message');
-  msg.innerHTML = `<strong style="color:#ffee00;">MOD SYSTEM:</strong> ${user} artık MODERATOR ⭐`;
-  document.getElementById('messages').appendChild(msg);
-}
-
-function banUser() {
-  const user = document.getElementById('userSelect').value;
-
-  if (!bannedUsers.includes(user) && user !== 'KINGBATUHAN') {
-    bannedUsers.push(user);
-  }
-
-  updateUsers();
-
-  const msg = document.createElement('div');
-  msg.classList.add('message');
-  msg.innerHTML = `<strong style="color:red;">ADMIN:</strong> ${user} banlandı 🚫`;
-  document.getElementById('messages').appendChild(msg);
-}
-
-function kickUser() {
-  const user = document.getElementById('userSelect').value;
-
-  const msg = document.createElement('div');
-  msg.classList.add('message');
-  msg.innerHTML = `<strong style="color:orange;">SYSTEM:</strong> ${user} odadan atıldı ⚠️`;
-  document.getElementById('messages').appendChild(msg);
-
-  const userElements = document.querySelectorAll('.user');
-
-  userElements.forEach(el => {
-    const name = el.getAttribute('data-name') || el.innerText.trim();
-
-    if (name.includes(user)) {
-      el.style.display = 'none';
-
-      setTimeout(() => {
-        if (!bannedUsers.includes(user)) {
-          el.style.display = 'block';
+            } catch (error) {
+                console.error(error);
+                hataGoster("Bağlantı hatası oluştu. Lütfen daha sonra tekrar deneyin.");
+            } finally {
+                loader.style.display = "none";
+                btnSorgula.disabled = false;
+            }
         }
-      }, 5000);
-    }
-  });
-}
 
-function clearChat() {
-  document.getElementById('messages').innerHTML = '';
-}
+        function hataGoster(mesaj) {
+            const resultArea = document.getElementById('resultArea');
+            resultArea.className = "result-area error";
+            resultArea.innerHTML = mesaj;
+            resultArea.style.style.display = "block";
+            resultArea.style.display = "block";
+        }
 
-updateUsers();
-</script>
-
+        function extractShortcode(url) {
+            const matches = url.match(/(?:p|reel|tv)\/([^\/?#&]+)/);
+            return matches ? matches[1] : '';
+        }
+    </script>
 </body>
 </html>
