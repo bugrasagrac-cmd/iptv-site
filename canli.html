@@ -2,49 +2,60 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Mini CMS</title>
+<title>Mini Social CMS</title>
 
 <style>
 body{
     margin:0;
     font-family:Arial;
-    background:#f2f2f2;
+    background:#f1f1f1;
 }
 
 .nav{
     background:#111;
-    color:#fff;
+    color:white;
     padding:15px;
     display:flex;
     justify-content:space-between;
 }
 
+/* SITE */
 #site{
     padding:20px;
 }
 
-.card{
+.post{
     background:white;
-    margin-bottom:15px;
+    margin-bottom:20px;
     padding:15px;
-    border-radius:10px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
-.card img{
-    width:100%;
-    border-radius:10px;
+.title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.desc{
+    margin-top:5px;
+    color:#444;
+}
+
+/* IMAGE GRID */
+.gallery{
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
     margin-top:10px;
 }
 
-.delete{
-    background:red;
-    color:white;
-    border:none;
-    padding:5px 10px;
-    margin-top:10px;
-    cursor:pointer;
-    border-radius:5px;
+.gallery img{
+    width:200px;
+    height:150px;
+    object-fit:cover;
+    border-radius:10px;
+    flex-shrink:0;
 }
 
 /* ADMIN */
@@ -52,10 +63,10 @@ body{
     position:fixed;
     right:20px;
     bottom:20px;
-    width:320px;
+    width:340px;
     background:white;
     padding:15px;
-    border-radius:10px;
+    border-radius:12px;
     box-shadow:0 0 10px rgba(0,0,0,0.3);
     display:none;
 }
@@ -79,13 +90,21 @@ button{
     border:none;
     border-radius:6px;
 }
+
+.delete{
+    margin-top:10px;
+    background:red;
+    color:white;
+    border:none;
+    padding:6px 10px;
+}
 </style>
 </head>
 
 <body>
 
 <div class="nav">
-    <div>🔥 Mini CMS</div>
+    <div>🔥 Multi Photo CMS</div>
     <button onclick="openAdmin()">Admin</button>
 </div>
 
@@ -103,9 +122,10 @@ button{
     <div id="panelBox" style="display:none;">
         <h3>Yeni Post</h3>
 
-        <textarea id="text" placeholder="Yazı..."></textarea>
+        <input type="text" id="title" placeholder="Başlık">
+        <textarea id="desc" placeholder="Açıklama"></textarea>
 
-        <input type="file" id="img" accept="image/*">
+        <input type="file" id="imgs" accept="image/*" multiple>
 
         <button class="btn" onclick="addPost()">Paylaş</button>
     </div>
@@ -123,11 +143,16 @@ function render(){
     let site = document.getElementById("site");
     site.innerHTML = "";
 
-    posts.forEach((p, i) => {
+    posts.forEach((p,i)=>{
         site.innerHTML += `
-        <div class="card">
-            <div>${p.text}</div>
-            ${p.img ? `<img src="${p.img}">` : ""}
+        <div class="post">
+            <div class="title">${p.title}</div>
+            <div class="desc">${p.desc}</div>
+
+            <div class="gallery">
+                ${p.images.map(img => `<img src="${img}">`).join("")}
+            </div>
+
             <button class="delete" onclick="del(${i})">Sil</button>
         </div>
         `;
@@ -150,39 +175,60 @@ function login(){
         document.getElementById("loginBox").style.display="none";
         document.getElementById("panelBox").style.display="block";
     } else {
-        alert("Hatalı şifre");
+        alert("Hatalı şifre!");
     }
 }
 
-// post ekle
+// post ekle (20-25 foto destekli)
 function addPost(){
-    let text = document.getElementById("text").value;
-    let file = document.getElementById("img").files[0];
+    let title = document.getElementById("title").value;
+    let desc = document.getElementById("desc").value;
+    let files = document.getElementById("imgs").files;
 
-    if(text.trim()=="" && !file) return;
+    if(!title && !desc && files.length === 0) return;
 
-    if(file){
+    let images = [];
+
+    if(files.length > 25){
+        alert("En fazla 25 fotoğraf yükleyebilirsin!");
+        return;
+    }
+
+    let loaded = 0;
+
+    if(files.length === 0){
+        savePost(title, desc, []);
+        return;
+    }
+
+    for(let i=0;i<files.length;i++){
         let reader = new FileReader();
 
         reader.onload = function(e){
-            posts.unshift({
-                text:text,
-                img:e.target.result
-            });
-            render();
+            images.push(e.target.result);
+            loaded++;
+
+            if(loaded === files.length){
+                savePost(title, desc, images);
+            }
         }
 
-        reader.readAsDataURL(file);
-    } else {
-        posts.unshift({
-            text:text,
-            img:null
-        });
-        render();
+        reader.readAsDataURL(files[i]);
     }
+}
 
-    document.getElementById("text").value="";
-    document.getElementById("img").value="";
+function savePost(title, desc, images){
+    posts.unshift({
+        title,
+        desc,
+        images
+    });
+
+    document.getElementById("title").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("imgs").value="";
+
+    render();
 }
 
 // sil
