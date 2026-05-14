@@ -1,34 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Admin</title>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<title>Admin Panel</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f2f2f2;
+}
+
+.nav{
+    background:#111;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.container{
+    padding:20px;
+}
+
+.panel{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    margin-bottom:10px;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:green;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.login{
+    max-width:300px;
+    margin:auto;
+    margin-top:50px;
+}
+
+</style>
 </head>
 
-<body style="background:black;color:white;text-align:center">
+<body>
 
-<h2>Admin</h2>
+<div class="nav">
+    <div>🔐 Admin Panel</div>
+    <a href="index.html" style="color:white;">Siteye Dön</a>
+</div>
 
-<input id="name" placeholder="Kanal adı">
-<input id="url" placeholder="link">
-<br>
-<button onclick="ekle()">Ekle</button>
+<div class="container">
+
+<div id="loginBox" class="login panel">
+    <h3>Giriş</h3>
+    <input type="password" id="pass" placeholder="Şifre">
+    <button onclick="login()">Giriş</button>
+</div>
+
+<div id="adminBox" class="panel" style="display:none;">
+    <h3>Yeni Post</h3>
+
+    <input type="text" id="title" placeholder="Başlık">
+    <textarea id="desc" placeholder="Açıklama"></textarea>
+
+    <input type="file" id="files" multiple accept="image/*,video/*">
+
+    <button onclick="addPost()">Paylaş</button>
+</div>
+
+</div>
 
 <script>
-const supabase = window.supabase.createClient(
-  "https://ycjhdiyvpymwlbycaznz.supabase.co",
-  "sb_publishable_LcVi575CzFILIXI4-I9S7A_ZrptwTgn"
-);
 
-async function ekle(){
-  let name = document.getElementById("name").value;
-  let url = document.getElementById("url").value;
+let password = "1234";
 
-  await supabase.from("channels").insert([{ name, url }]);
+let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-  alert("eklendi");
+function login(){
+    let pass = document.getElementById("pass").value;
+
+    if(pass === password){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("adminBox").style.display="block";
+    } else {
+        alert("Hatalı şifre");
+    }
 }
+
+function addPost(){
+    let title = document.getElementById("title").value;
+    let desc = document.getElementById("desc").value;
+    let files = document.getElementById("files").files;
+
+    let fileArray = [];
+
+    if(files.length === 0){
+        save(title, desc, []);
+        return;
+    }
+
+    let loaded = 0;
+
+    for(let i=0;i<files.length;i++){
+        let reader = new FileReader();
+
+        reader.onload = function(e){
+
+            let type = files[i].type.startsWith("video") ? "video" : "image";
+
+            fileArray.push({
+                type: type,
+                data: e.target.result
+            });
+
+            loaded++;
+
+            if(loaded === files.length){
+                save(title, desc, fileArray);
+            }
+        }
+
+        reader.readAsDataURL(files[i]);
+    }
+}
+
+function save(title, desc, files){
+    posts.unshift({
+        title,
+        desc,
+        files
+    });
+
+    localStorage.setItem("posts", JSON.stringify(posts));
+
+    document.getElementById("title").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("files").value="";
+
+    alert("Paylaşıldı!");
+}
+
 </script>
 
 </body>
