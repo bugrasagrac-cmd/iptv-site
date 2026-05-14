@@ -2,105 +2,84 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>AI Site Builder</title>
+<title>Ana Sayfa</title>
+
 <style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #f4f4f4;
+body{
+    margin:0;
+    font-family:Arial;
+    background:#eef0f3;
 }
 
-textarea {
-  width: 80%;
-  height: 120px;
+.nav{
+    background:#111;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
 }
 
-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  cursor: pointer;
+.container{
+    padding:20px;
 }
 
-pre {
-  width: 80%;
-  margin: auto;
-  margin-top: 20px;
-  background: black;
-  color: lime;
-  padding: 10px;
-  text-align: left;
-  height: 300px;
-  overflow: auto;
+.post{
+    background:white;
+    margin-bottom:20px;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.media img, .media video{
+    width:100%;
+    margin-top:10px;
+    border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🤖 AI Site Builder (Tek Dosya)</h2>
+<div class="nav">
+    <div>🔥 Ana Sayfa</div>
+    <a href="admin.html" style="color:white;">Admin Giriş</a>
+</div>
 
-<textarea id="prompt" placeholder="Örn: kahve dükkanı sitesi yap"></textarea>
-<br>
-<button onclick="generate()">Site Oluştur</button>
-
-<pre id="output">Hazır...</pre>
+<div class="container" id="feed"></div>
 
 <script>
-function generate() {
-  const text = document.getElementById("prompt").value.toLowerCase();
+let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-  let result = "";
+function render(){
+    let feed = document.getElementById("feed");
+    feed.innerHTML = "";
 
-  // 🧠 DEMO AI LOGIC (backend yoksa fallback)
-  if (text.includes("kahve")) {
-    result = `
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-body { font-family: Arial; text-align:center; }
-header { background:brown; color:white; padding:20px; }
-button { padding:10px; background:brown; color:white; border:none; }
-</style>
-</head>
-<body>
+    posts.forEach(p=>{
+        let mediaHTML = "";
 
-<header>
-<h1>Kahve Dükkanı</h1>
-</header>
+        p.files.forEach(f=>{
+            if(f.type === "image"){
+                mediaHTML += `<img src="${f.data}">`;
+            } else if(f.type === "video"){
+                mediaHTML += `
+                <video controls>
+                    <source src="${f.data}">
+                </video>`;
+            }
+        });
 
-<p>En iyi kahveler burada ☕</p>
-<button>Sipariş Ver</button>
-
-</body>
-</html>`;
-  }
-
-  else if (text.includes("e-ticaret")) {
-    result = `
-<!DOCTYPE html>
-<html>
-<body>
-<h1>E-Ticaret Sitesi</h1>
-<div>Ürün 1 - 100₺</div>
-<div>Ürün 2 - 200₺</div>
-</body>
-</html>`;
-  }
-
-  else {
-    result = `
-<!DOCTYPE html>
-<html>
-<body>
-<h1>Genel Site</h1>
-<p>AI basit şablon oluşturdu</p>
-</body>
-</html>`;
-  }
-
-  document.getElementById("output").innerText = result;
+        feed.innerHTML += `
+        <div class="post">
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+            <div class="media">${mediaHTML}</div>
+        </div>
+        `;
+    });
 }
+
+render();
 </script>
 
 </body>
