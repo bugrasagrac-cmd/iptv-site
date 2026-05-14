@@ -271,5 +271,49 @@
   });
 </script>
 
+
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="position:fixed;top:20px;right:20px;z-index:9999;background:rgba(0,0,0,0.9);border:2px solid #ff00ff;padding:15px;border-radius:15px;box-shadow:0 0 20px #ff00ff;width:260px;">
+  <h3 style="text-align:center;color:#00ffff;margin-bottom:10px;text-shadow:0 0 10px #00ffff;">👑 ADMIN PANEL</h3>
+
+  <select id="userSelect" style="width:100%;padding:10px;margin-bottom:10px;border-radius:10px;background:#111;color:white;border:none;">
+    <option>KINGBATUHAN</option>
+    <option>NightWolf</option>
+    <option>DarkFire</option>
+    <option>IceStorm</option>
+    <option>GoldMaster</option>
+  </select>
+
+  <button onclick="makeMod()" style="width:100%;margin-bottom:8px;padding:10px;border:none;border-radius:10px;background:#0066ff;color:white;font-weight:bold;cursor:pointer;">⭐ MOD YAP</button>
+
+  <button onclick="banUser()" style="width:100%;margin-bottom:8px;padding:10px;border:none;border-radius:10px;background:#ff0033;color:white;font-weight:bold;cursor:pointer;">🚫 BANLA</button>
+
+  <button onclick="kickUser()" style="width:100%;margin-bottom:8px;padding:10px;border:none;border-radius:10px;background:#ff8800;color:white;font-weight:bold;cursor:pointer;">⚠️ ODADAN AT</button>
+
+  <button onclick="clearChat()" style="width:100%;padding:10px;border:none;border-radius:10px;background:#00cc99;color:white;font-weight:bold;cursor:pointer;">🧹 CHAT TEMİZLE</button>
+</div>
+
+<script>
+function makeMod() {
+  const user = document.getElementById('userSelect').value;
+  alert(user + ' artık MODERATOR! ⭐');
+}
+
+function banUser() {
+  const user = document.getElementById('userSelect').value;
+  alert(user + ' BANLANDI 🚫');
+}
+
+function kickUser() {
+  const user = document.getElementById('userSelect').value;
+  alert(user + ' odadan atıldı ⚠️');
+}
+
+function clearChat() {
+  document.getElementById('messages').innerHTML = '';
+}
+</script>
+
 </body>
 </html>
