@@ -295,24 +295,99 @@
 </div>
 
 <script>
+let bannedUsers = [];
+let moderators = [];
+
+function updateUsers() {
+  const userElements = document.querySelectorAll('.user');
+
+  userElements.forEach(el => {
+    const originalName = el.getAttribute('data-name') || el.innerText.replace(/[⭐👑]/g,'').trim();
+    el.setAttribute('data-name', originalName);
+
+    if (bannedUsers.includes(originalName)) {
+      el.style.display = 'none';
+      return;
+    }
+
+    el.style.display = 'block';
+
+    if (moderators.includes(originalName)) {
+      el.innerHTML = '⭐ ' + originalName;
+      el.style.color = '#ffee00';
+      el.style.textShadow = '0 0 10px #ffee00';
+    } else if (originalName === 'KINGBATUHAN') {
+      el.innerHTML = '👑 ' + originalName;
+      el.style.color = '#ff2222';
+      el.style.textShadow = '0 0 12px #ff0000';
+    } else {
+      el.innerHTML = originalName;
+      el.style.color = 'white';
+      el.style.textShadow = '0 0 8px white';
+    }
+  });
+}
+
 function makeMod() {
   const user = document.getElementById('userSelect').value;
-  alert(user + ' artık MODERATOR! ⭐');
+
+  if (user !== 'KINGBATUHAN' && !moderators.includes(user)) {
+    moderators.push(user);
+  }
+
+  updateUsers();
+
+  const msg = document.createElement('div');
+  msg.classList.add('message');
+  msg.innerHTML = `<strong style="color:#ffee00;">MOD SYSTEM:</strong> ${user} artık MODERATOR ⭐`;
+  document.getElementById('messages').appendChild(msg);
 }
 
 function banUser() {
   const user = document.getElementById('userSelect').value;
-  alert(user + ' BANLANDI 🚫');
+
+  if (!bannedUsers.includes(user) && user !== 'KINGBATUHAN') {
+    bannedUsers.push(user);
+  }
+
+  updateUsers();
+
+  const msg = document.createElement('div');
+  msg.classList.add('message');
+  msg.innerHTML = `<strong style="color:red;">ADMIN:</strong> ${user} banlandı 🚫`;
+  document.getElementById('messages').appendChild(msg);
 }
 
 function kickUser() {
   const user = document.getElementById('userSelect').value;
-  alert(user + ' odadan atıldı ⚠️');
+
+  const msg = document.createElement('div');
+  msg.classList.add('message');
+  msg.innerHTML = `<strong style="color:orange;">SYSTEM:</strong> ${user} odadan atıldı ⚠️`;
+  document.getElementById('messages').appendChild(msg);
+
+  const userElements = document.querySelectorAll('.user');
+
+  userElements.forEach(el => {
+    const name = el.getAttribute('data-name') || el.innerText.trim();
+
+    if (name.includes(user)) {
+      el.style.display = 'none';
+
+      setTimeout(() => {
+        if (!bannedUsers.includes(user)) {
+          el.style.display = 'block';
+        }
+      }, 5000);
+    }
+  });
 }
 
 function clearChat() {
   document.getElementById('messages').innerHTML = '';
 }
+
+updateUsers();
 </script>
 
 </body>
